@@ -14,8 +14,10 @@ Source0:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{version}-
 # Source0-md5:	c71fdddccb20e8fc393d846e9c61d685
 Source1:	http://www.evenbalance.com/downloads/pbweb.x86
 # Source1-md5:	cb4baff8cf481915d87fa4da23294e8e
+Source2:	%{name}.init
+Source3:	%{name}.sysconfig
 URL:		http://www.idsoftware.com/
-#Requires:	screen
+Requires:	screen
 Requires:	OpenGL
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -39,9 +41,11 @@ sh %{SOURCE0} --tar xf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_gamedir}/{,baseq3,pb/{,htm}}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_gamedir}/{,baseq3,pb/{,htm}}}
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_gamedir}/
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/quake3
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/quake3
 install baseq3/* $RPM_BUILD_ROOT%{_gamedir}/baseq3/
 install pb/*.so $RPM_BUILD_ROOT%{_gamedir}/pb/
 install pb/htm/*.htm $RPM_BUILD_ROOT%{_gamedir}/pb/htm/
@@ -57,10 +61,13 @@ echo "Or if you have got a Windows installation of Q3 make a symlink to save spa
 %files
 %defattr(644,root,root,755)
 %doc Q3A_EULA.txt README-linux.txt pb/PB_EULA.txt
+%attr(754,root,root) /etc/rc.d/init.d/quake3
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/quake3
 %dir %{_gamedir}
 %{_gamedir}/baseq3
 %dir %{_gamedir}/pb
 %{_gamedir}/pb/htm
 %attr(755,root,root) %{_gamedir}/pb/*.so
 %attr(755,root,root) %{_gamedir}/pbweb.x86
+%attr(754,root,games) %{_gamedir}/q3ded
 %attr(754,root,games) %{_gamedir}/quake3*x86
