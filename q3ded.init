@@ -3,7 +3,7 @@
 # q3ded		This is the init script for starting
 #		up the Quake3 dedicated server
 #
-# chkconfig:	- 85 26
+# chkconfig:	345 85 25
 # description:	Starts and stops the Quake3 dedicated server.
 #
 # processname:	q3ded
