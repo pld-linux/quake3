@@ -3,7 +3,7 @@ Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.32b
 %define		_subver	3
-Release:	3
+Release:	4
 Vendor:		id Software
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
@@ -15,10 +15,19 @@ Source3:	%{name}.png
 Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 URL:		http://www.idsoftware.com/
+BuildRequires:  rpmbuild(macros) >= 1.159
+Requires:       %{name}-common = %{version}-%{release}
+Requires:       OpenGL
+Requires:       psmisc
+Requires(pre):  /bin/id
+Requires(pre):  /usr/bin/getgid
+Requires(pre):  /usr/sbin/groupadd
+Requires(pre):  /usr/sbin/useradd
+Requires(postun):       /usr/sbin/groupdel
+Requires(postun):       /usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name}-common = %{version}-%{release}
-Requires:	OpenGL
-Requires:	psmisc
+Provides:       group(quake3)
+Provides:       user(quake3)
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -106,6 +115,25 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre common
+if [ -n "`/usr/bin/getgid quake3`" ]; then
+	if [ "`/usr/bin/getgid quake3`" != 38 ]; then
+		echo "Error: group quake3 doesn't have gid=38. Correct this before installing quake3." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 38 quake3
+fi
+if [ -n "`/bin/id -u quake3 2>/dev/null`" ]; then
+	if [ "`/bin/id -u quake3`" != 124 ]; then
+		echo "Error: user quake3 doesn't have uid=124. Correct this before installing quake3." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 124 -d %{_gamedir} -s /bin/bash \
+		-c "Quake ]|[ Arena" -g quake3 quake3 1>&2
+fi
+
 %post common
 if [ "$1" = "1" ]; then
 echo ""
@@ -130,30 +158,36 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del q3ded
 fi
 
+%postun common
+if [ "$1" = "0" ]; then
+	%userremove quake3
+	%groupremove quake3
+fi
+
 %files
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_gamedir}/quake3.x86
-%attr(755,root,root) %{_bindir}/quake3
+%defattr(644,quake3,quake3,755)
+%attr(755,quake3,quake3) %{_gamedir}/quake3.x86
+%attr(755,quake3,quake3) %{_bindir}/quake3
 %{_desktopdir}/quake3.desktop
 
 %files common
-%defattr(644,root,root,755)
+%defattr(644,quake3,quake3,755)
 %doc Q3A_EULA.txt README-linux.txt pb/PB_EULA.txt
 %dir %{_gamedir}
 %{_gamedir}/baseq3
 %dir %{_gamedir}/pb
 %{_gamedir}/pb/htm
-%attr(755,root,root) %{_gamedir}/pb/*.so
+%attr(755,quake3,quake3) %{_gamedir}/pb/*.so
 %{_pixmapsdir}/quake3.png
 
 %files server
-%defattr(644,root,root,755)
+%defattr(644,quake3,quake3,755)
 %attr(755,root,root) /etc/rc.d/init.d/q3ded
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/q3ded
-%attr(755,root,root) %{_gamedir}/q3ded
+%attr(755,quake3,quake3) %{_gamedir}/q3ded
 
 %files smp
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_gamedir}/quake3-smp.x86
-%attr(755,root,root) %{_bindir}/quake3-smp
+%defattr(644,quake3,quake3,755)
+%attr(755,quake3,quake3) %{_gamedir}/quake3-smp.x86
+%attr(755,quake3,quake3) %{_bindir}/quake3-smp
 %{_desktopdir}/quake3-smp.desktop
