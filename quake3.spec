@@ -5,7 +5,7 @@ Version:	1.32b
 %define		_subver	3
 Release:	1
 Vendor:		id Software
-License:	Q3A EULA
+License:	Q3A EULA, PB EULA
 Group:		Applications/Games
 Source0:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{version}-%{_subver}.x86.run
 # Source0-md5:	c71fdddccb20e8fc393d846e9c61d685
