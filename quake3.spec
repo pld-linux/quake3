@@ -1,13 +1,9 @@
-#
-# TODO:
-#	- pre, post
-#
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.32b
 %define		_subver	3
-Release:	1.9
+Release:	2
 Vendor:		id Software
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
@@ -110,21 +106,27 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
+if [ "$1" = "1" ]; then
 echo ""
 echo "You need to copy pak0.pk3 from your Quake3 CD into %{_gamedir}/baseq3/."
 echo "Or if you have got a Windows installation of Q3 make a symlink to save space."
 echo ""
+fi
 
 %post server
 /sbin/chkconfig --add q3ded
-
-echo ""
-echo "To start a dedicated server, run /etc/rc.d/init.d/q3ded start"
-echo ""
+if [ -f /var/lock/subsys/q3ded ]; then
+    /etc/rc.d/init.d/q3ded restart 1>&2
+else
+    echo "Run \"/etc/rc.d/init.d/q3ded start\" to start Quake3 server"
+fi
 
 %preun server
 if [ "$1" = "0" ]; then
-	/sbin/chkconfig --del q3ded
+    if [ -f /var/lock/subsys/q3ded ]; then
+	/etc/rc.d/init.d/q3ded stop 1>&2
+    fi
+    /sbin/chkconfig --del q3ded
 fi
 
 %files
