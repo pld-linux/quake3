@@ -15,19 +15,19 @@ Source3:	%{name}.png
 Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 URL:		http://www.idsoftware.com/
-BuildRequires:  rpmbuild(macros) >= 1.159
-Requires:       %{name}-common = %{version}-%{release}
-Requires:       OpenGL
-Requires:       psmisc
-Requires(pre):  /bin/id
-Requires(pre):  /usr/bin/getgid
-Requires(pre):  /usr/sbin/groupadd
-Requires(pre):  /usr/sbin/useradd
-Requires(postun):       /usr/sbin/groupdel
-Requires(postun):       /usr/sbin/userdel
+BuildRequires:	rpmbuild(macros) >= 1.159
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
-Provides:       group(quake3)
-Provides:       user(quake3)
+Requires:	%{name}-common = %{version}-%{release}
+Requires:	OpenGL
+Requires:	psmisc
+Provides:	group(quake3)
+Provides:	user(quake3)
 ExclusiveArch:	%{ix86} amd64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
