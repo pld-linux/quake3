@@ -117,22 +117,22 @@ fi
 %post server
 /sbin/chkconfig --add q3ded
 if [ -f /var/lock/subsys/q3ded ]; then
-    /etc/rc.d/init.d/q3ded restart 1>&2
+	/etc/rc.d/init.d/q3ded restart 1>&2
 else
-    echo "Run \"/etc/rc.d/init.d/q3ded start\" to start Quake3 server"
+	echo "Run \"/etc/rc.d/init.d/q3ded start\" to start Quake3 server"
 fi
 
 %preun server
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/q3ded ]; then
-	/etc/rc.d/init.d/q3ded stop 1>&2
-    fi
-    /sbin/chkconfig --del q3ded
+	if [ -f /var/lock/subsys/q3ded ]; then
+		/etc/rc.d/init.d/q3ded stop 1>&2
+	fi
+	/sbin/chkconfig --del q3ded
 fi
 
 %files
 %defattr(644,root,root,755)
-%attr(754,root,games) %{_gamedir}/quake3.x86
+%attr(755,root,games) %{_gamedir}/quake3.x86
 %attr(755,root,root) %{_bindir}/quake3
 %attr(644,root,root) %{_desktopdir}/quake3.desktop
 
@@ -148,12 +148,12 @@ fi
 
 %files server
 %defattr(644,root,root,755)
-%attr(754,root,root) /etc/rc.d/init.d/q3ded
+%attr(755,root,root) /etc/rc.d/init.d/q3ded
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/q3ded
-%attr(754,root,games) %{_gamedir}/q3ded
+%attr(755,root,games) %{_gamedir}/q3ded
 
 %files smp
 %defattr(644,root,root,755)
-%attr(754,root,games) %{_gamedir}/quake3-smp.x86
+%attr(755,root,games) %{_gamedir}/quake3-smp.x86
 %attr(755,root,root) %{_bindir}/quake3-smp
 %attr(644,root,root) %{_desktopdir}/quake3-smp.desktop
