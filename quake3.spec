@@ -64,7 +64,7 @@ Quake3 dla maszyny wieloprocesorowej.
 Summary:	Common files for quake3
 Summary(pl):	Pliki wspólne dla quake3
 Group:		Applications/Games
-
+Obsoletes:	quake3-single
 
 %description common
 Common files for quake3 server and player game.
