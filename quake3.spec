@@ -3,7 +3,7 @@ Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.32b
 %define		_subver	3
-Release:	0.2
+Release:	0.9
 Vendor:		id Software
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
@@ -15,8 +15,9 @@ Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 URL:		http://www.idsoftware.com/
 Requires(post,preun):	/sbin/chkconfig
-Requires:	screen
 Requires:	OpenGL
+Requires:	psmisc
+Requires:	screen
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -57,6 +58,8 @@ rm -rf $RPM_BUILD_ROOT
 echo ""
 echo "You need to copy pak0.pk3 from your Quake3 CD into %{_gamedir}/baseq3/."
 echo "Or if you have got a Windows installation of Q3 make a symlink to save space."
+echo ""
+echo "To start a dedicated server, run /etc/rc.d/init.d/q3ded start"
 echo ""
 
 %preun
