@@ -1,9 +1,13 @@
+#
+# TODO:
+#	- split package
+#
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.32b
 %define		_subver	3
-Release:	1
+Release:	2
 Vendor:		id Software
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
@@ -11,6 +15,8 @@ Source0:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{version}-
 # Source0-md5:	c71fdddccb20e8fc393d846e9c61d685
 Source1:	q3ded.init
 Source2:	q3ded.sysconfig
+Source3:	%{name}.png
+Source4:	%{name}.desktop
 URL:		http://www.idsoftware.com/
 Requires(post,preun):	/sbin/chkconfig
 Requires:	OpenGL
@@ -36,10 +42,14 @@ sh %{SOURCE0} --tar xf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_gamedir}/{baseq3,pb/{,htm}},%{_bindir}}
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT{%{_gamedir}/{baseq3,pb/{,htm}},%{_bindir}} \
+	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
+install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
+install %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
 install baseq3/* $RPM_BUILD_ROOT%{_gamedir}/baseq3
 install bin/Linux/x86/* $RPM_BUILD_ROOT%{_gamedir}
 install pb/*.so $RPM_BUILD_ROOT%{_gamedir}/pb
@@ -87,3 +97,5 @@ fi
 %attr(755,root,root) %{_gamedir}/pb/*.so
 %attr(754,root,games) %{_gamedir}/q3ded
 %attr(754,root,games) %{_gamedir}/quake3*x86
+%{_pixmapsdir}/quake3.png
+%{_desktopdir}/quake3.desktop
