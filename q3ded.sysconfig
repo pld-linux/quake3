@@ -1,0 +1,1 @@
+Q3_OPTS="+set com_hunkmegs 32 +set dedicated 1 +set net_port 27960 +map q3tourney2"
