@@ -1,3 +1,6 @@
+# TODO:
+#		- init script for the dedicated server.
+#
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
@@ -5,9 +8,10 @@ Version:	1.32b
 %define		_subver	3
 Release:	0.1
 Vendor:		id Software
-License:	Q3AEULA, PBEULA
+License:	Q3A EULA, PB EULA
 Group:		Applications/Games
 Source0:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{version}-%{_subver}.x86.run
+# Source0-md5:	c71fdddccb20e8fc393d846e9c61d685
 URL:		http://www.idsoftware.com/games/quake/quake3-arena/
 #Requires:	screen
 Requires:	OpenGL
