@@ -74,6 +74,7 @@ case "$action" in
 	;;
   status)
 	status q3ded
+	screen -ls | grep q3ded
 	exit $?
 	;;
   restart)
