@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Quake III
+Comment=Quake3 for linux
+Comment[pl]=Quake3 dla Linuksa
+Exec=quake3
+Icon=quake3.png 
+Terminal=false
+Type=Application
+Category=Game;FPP;
+Encoding=UTF-8
