@@ -49,8 +49,8 @@ Quake3 server.
 Serwer Quake3.
 
 %package smp
-Summary:	Quake3 for smp
-Summary(pl):	Quake3 dla smp
+Summary:	Quake3 for SMP
+Summary(pl):	Quake3 dla SMP
 Group:		Applications/Games
 Requires:	%{name}-common = %{version}-%{release}
 
@@ -132,9 +132,9 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,games) %{_gamedir}/quake3.x86
+%attr(755,root,root) %{_gamedir}/quake3.x86
 %attr(755,root,root) %{_bindir}/quake3
-%attr(644,root,root) %{_desktopdir}/quake3.desktop
+%{_desktopdir}/quake3.desktop
 
 %files common
 %defattr(644,root,root,755)
@@ -150,10 +150,10 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) /etc/rc.d/init.d/q3ded
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/q3ded
-%attr(755,root,games) %{_gamedir}/q3ded
+%attr(755,root,root) %{_gamedir}/q3ded
 
 %files smp
 %defattr(644,root,root,755)
-%attr(755,root,games) %{_gamedir}/quake3-smp.x86
+%attr(755,root,root) %{_gamedir}/quake3-smp.x86
 %attr(755,root,root) %{_bindir}/quake3-smp
-%attr(644,root,root) %{_desktopdir}/quake3-smp.desktop
+%{_desktopdir}/quake3-smp.desktop
