@@ -27,10 +27,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_gamedir	/opt/quake3
 
 %description
-Quake 3 for Linux.
+"The most important PC game ever." Quake 3 for Linux.
 
 %description -l pl
-Quake 3 dla Linuksa.
+"Najwa¿niejsza gra wszechczasów na PC." Quake 3 dla linuksa.
 
 %prep
 %setup -qcT
