@@ -42,8 +42,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_gamedir}/{,baseq3,pb/{,htm}}}
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_gamedir}/
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/quake3
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/quake3
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
 install baseq3/* $RPM_BUILD_ROOT%{_gamedir}/baseq3/
 install bin/Linux/x86/* $RPM_BUILD_ROOT%{_gamedir}/
 install pb/*.so $RPM_BUILD_ROOT%{_gamedir}/pb/
