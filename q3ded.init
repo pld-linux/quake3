@@ -1,0 +1,81 @@
+#!/bin/sh
+#
+# q3ded		This is the init script for starting
+#		up the Quake3 dedicated server
+#
+# chkconfig:	-
+# description:	Starts and stops the Quake3 dedicated server.
+#
+# processname:	q3ded
+
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network
+
+if [ -f /etc/sysconfig/q3ded ]; then
+	. /etc/sysconfig/q3ded
+else
+	nls "Error: %s not found" /etc/sysconfig/q3ded
+	nls " Quake3 dedicated server can't be run."
+	exit 1
+fi
+
+if [ ! "$Q3_OPTS" ]; then
+	nls "Error: Q3_OPTS not found or is empty"
+	nls " Quake3 dedicated server can't be run."
+	exit 1
+fi
+
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status -a "$1" != init ]; then
+		msg_network_down "Quake3 dedicated server"
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+action="$1"
+RETVAL=0
+case "$action" in
+  start)
+	if [ ! -f /var/lock/subsys/q3ded ]; then
+	    msg_starting "Quake3 dedicated server"
+	    screen -A -m -d -S q3ded su -c "cd /opt/quake3/ && ./q3ded ${Q3_OPTS}"
+	    RETVAL=$?
+	    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/q3ded && ok || fail
+	else
+	    msg_already_running "Quake3 dedicated server"
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/q3ded ]; then
+	    msg_stopping "Quake3 dedicated server"
+	    rm -f /var/lock/subsys/q3ded &>/dev/null
+	    SCREEN_PID=`screen -ls | grep q3ded | awk -F . '{print $1}' | sed -e s/.//`
+	    if [ ! -z "$SCREEN_PID" ]; then
+		Q3_PID=`pstree -p ${SCREEN_PID} | sed -e 's:^.*q3ded:: ; s:(:: ; s:)::'`
+		if [ ! -z "$Q3_PID" ]; then
+		    kill $Q3_PID
+		    RETVAL=$?
+		    [ $RETVAL -eq 0 ] && ok
+		fi
+	    else
+		fail
+	    fi
+	fi
+	exit $?
+	;;
+  status)
+	status q3ded
+	exit $?
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|status}"
+	exit 3
+esac
+
+exit $RETVAL
