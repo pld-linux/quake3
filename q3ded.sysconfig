@@ -1,3 +1,3 @@
 # default: server disabled
-#
-# Q3_OPTS="+set com_hunkmegs 32 +set dedicated 1 +set net_port 27960 +map q3tourney2"
+# +set sv_strictAuth 0 - disabled players cdkey checking 
+# Q3_OPTS="+set com_hunkmegs 32 +set dedicated 1 +set net_port 27960 +set sv_strictAuth 0 +map q3tourney2"
