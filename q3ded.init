@@ -39,38 +39,37 @@ RETVAL=0
 case "$action" in
   start)
 	if [ ! -f /var/lock/subsys/q3ded ]; then
-	    msg_starting "Quake3 dedicated server"
-	    if [ ! -x /opt/quake3/q3ded ]; then
-		fail
-		exit 1
-	    fi
-	    screen -A -m -d -S q3ded su - -c "cd /opt/quake3/ && ./q3ded ${Q3_OPTS}"
-	    touch /var/lock/subsys/q3ded && ok
+		msg_starting "Quake3 dedicated server"
+		if [ ! -x /opt/quake3/q3ded ]; then
+			fail
+			exit 1
+		fi
+		screen -A -m -d -S q3ded su - -c "cd /opt/quake3/ && ./q3ded ${Q3_OPTS}"
+		touch /var/lock/subsys/q3ded && ok
 	else
-	    msg_already_running "Quake3 dedicated server"
+		msg_already_running "Quake3 dedicated server"
 	fi
 	;;
   stop)
 	if [ -f /var/lock/subsys/q3ded ]; then
-	    msg_stopping "Quake3 dedicated server"
-	    rm -f /var/lock/subsys/q3ded &>/dev/null
-	    SCREEN_PID=`screen -ls | grep q3ded | awk -F . '{print $1}' | sed -e s/.//`
-	    if [ ! -z "$SCREEN_PID" ]; then
-		Q3_PID=`pstree -p ${SCREEN_PID} | sed -e 's:^.*q3ded:: ; s:(:: ; s:)::'`
-		if [ ! -z "$Q3_PID" ]; then
-		    kill $Q3_PID
-		    RETVAL=$?
-		    [ $RETVAL -eq 0 ] && ok
+		msg_stopping "Quake3 dedicated server"
+		rm -f /var/lock/subsys/q3ded &>/dev/null
+		SCREEN_PID=`screen -ls | grep q3ded | awk -F . '{print $1}' | sed -e s/.//`
+		if [ ! -z "$SCREEN_PID" ]; then
+			Q3_PID=`pstree -p ${SCREEN_PID} |\
+				sed -e 's:^.*q3ded:: ; s:(:: ; s:)::'`
+			if [ ! -z "$Q3_PID" ]; then
+				kill $Q3_PID
+				RETVAL=$?
+				[ $RETVAL -eq 0 ] && ok
+			else
+				fail
+			fi
 		else
-		    fail
-		    RETVAL=1
+			fail
 		fi
-	    else
-		fail
-		RETVAL=1
-	    fi
 	fi
-	exit $RETVAL
+	exit 0
 	;;
   status)
 	status q3ded
