@@ -182,8 +182,8 @@ fi
 
 %files server
 %defattr(644,quake3,quake3,755)
-%attr(755,root,root) /etc/rc.d/init.d/q3ded
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/q3ded
+%attr(754,root,root) /etc/rc.d/init.d/q3ded
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/q3ded
 %attr(755,quake3,quake3) %{_gamedir}/q3ded
 
 %files smp
