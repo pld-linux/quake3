@@ -3,7 +3,7 @@ Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.32b
 %define		_subver	3
-Release:	2
+Release:	3
 Vendor:		id Software
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
@@ -16,9 +16,9 @@ Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 URL:		http://www.idsoftware.com/
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
 Requires:	psmisc
-Requires:	screen
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -39,7 +39,8 @@ Summary(pl):	Serwer Quake3
 Group:		Applications/Games
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-common = %{version}-%{release}
+Requires:	screen
 
 %description server
 Quake3 server.
@@ -51,7 +52,7 @@ Serwer Quake3.
 Summary:	Quake3 for smp
 Summary(pl):	Quake3 dla smp
 Group:		Applications/Games
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-common = %{version}-%{release}
 
 %description smp
 Quake3 for multi processor machine.
@@ -59,17 +60,17 @@ Quake3 for multi processor machine.
 %description smp -l pl
 Quake3 dla maszyny wieloprocesorowej.
 
-%package single
-Summary:	Quake3 for single processor
-Summary(pl):	Quake3 dla jednego procesora
+%package common
+Summary:	Common files for quake3
+Summary(pl):	Pliki wspólne dla quake3
 Group:		Applications/Games
-Requires:	%{name} = %{version}-%{release}
 
-%description single
-Quake3 for single processor.
 
-%description single -l pl
-Quake3 dla jednego procesora.
+%description common
+Common files for quake3 server and player game.
+
+%description common -l pl
+Pliki wspólne quake3 dla serwera i trybu gracza.
 
 %prep
 %setup -qcT
@@ -105,7 +106,7 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post common
 if [ "$1" = "1" ]; then
 echo ""
 echo "You need to copy pak0.pk3 from your Quake3 CD into %{_gamedir}/baseq3/."
@@ -131,6 +132,12 @@ fi
 
 %files
 %defattr(644,root,root,755)
+%attr(754,root,games) %{_gamedir}/quake3.x86
+%attr(755,root,root) %{_bindir}/quake3
+%attr(644,root,root) %{_desktopdir}/quake3.desktop
+
+%files common
+%defattr(644,root,root,755)
 %doc Q3A_EULA.txt README-linux.txt pb/PB_EULA.txt
 %dir %{_gamedir}
 %{_gamedir}/baseq3
@@ -150,9 +157,3 @@ fi
 %attr(754,root,games) %{_gamedir}/quake3-smp.x86
 %attr(755,root,root) %{_bindir}/quake3-smp
 %attr(644,root,root) %{_desktopdir}/quake3-smp.desktop
-
-%files single
-%defattr(644,root,root,755)
-%attr(754,root,games) %{_gamedir}/quake3.x86
-%attr(755,root,root) %{_bindir}/quake3
-%attr(644,root,root) %{_desktopdir}/quake3.desktop
