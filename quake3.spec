@@ -36,37 +36,34 @@ Quake 3 dla linuksa.
 %setup -qcT
 sh %{SOURCE0} --tar xf
 
-%build
-
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_gamedir}/{,baseq3,pb/{,htm}},%{_bindir}}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_gamedir}/{baseq3,pb/{,htm}},%{_bindir}}
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/
+install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
-install baseq3/* $RPM_BUILD_ROOT%{_gamedir}/baseq3/
-install bin/Linux/x86/* $RPM_BUILD_ROOT%{_gamedir}/
-install pb/*.so $RPM_BUILD_ROOT%{_gamedir}/pb/
-install pb/htm/*.htm $RPM_BUILD_ROOT%{_gamedir}/pb/htm/
+install baseq3/* $RPM_BUILD_ROOT%{_gamedir}/baseq3
+install bin/Linux/x86/* $RPM_BUILD_ROOT%{_gamedir}
+install pb/*.so $RPM_BUILD_ROOT%{_gamedir}/pb
+install pb/htm/*.htm $RPM_BUILD_ROOT%{_gamedir}/pb/htm
+
+cat << EOF > $RPM_BUILD_ROOT%{_bindir}/quake3
+#!/bin/sh
+cd %{_gamedir}
+./quake3.x86
+EOF
+cat << EOF > $RPM_BUILD_ROOT%{_bindir}/quake3-smp
+#!/bin/sh
+cd %{_gamedir}
+./quake3-smp.x86
+EOF
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add q3ded
-
-cat << EOF > %{_bindir}/quake3
-#!/bin/sh
-cd %{_gamedir}
-./quake3.x86
-EOF
-cat << EOF > %{_bindir}/quake3-smp
-#!/bin/sh
-cd %{_gamedir}
-./quake3-smp.x86
-EOF
-chmod 755 %{_bindir}/quake3{,-smp}
 
 echo ""
 echo "You need to copy pak0.pk3 from your Quake3 CD into %{_gamedir}/baseq3/."
@@ -77,15 +74,13 @@ echo ""
 
 %preun
 if [ "$1" = "0" ]; then
-    /sbin/chkconfig --del q3ded
+	/sbin/chkconfig --del q3ded
 fi
-
-%postun
-rm -f %{_bindir}/quake3{,-smp}
 
 %files
 %defattr(644,root,root,755)
 %doc Q3A_EULA.txt README-linux.txt pb/PB_EULA.txt
+%attr(755,root,root) %{_bindir}/quake3*
 %attr(754,root,root) /etc/rc.d/init.d/q3ded
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/q3ded
 %dir %{_gamedir}
