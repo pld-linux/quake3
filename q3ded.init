@@ -76,12 +76,12 @@ case "$action" in
 	screen -ls | grep q3ded
 	exit $?
 	;;
-  restart)
+  restart|force-reload)
 	$0 stop
 	$0 start
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|status}"
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
 	exit 3
 esac
 
