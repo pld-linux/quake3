@@ -28,7 +28,7 @@ Requires(postun):       /usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Provides:       group(quake3)
 Provides:       user(quake3)
-ExclusiveArch:	%{ix86}
+ExclusiveArch:	%{ix86} amd64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
