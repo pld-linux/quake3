@@ -8,3 +8,4 @@ Terminal=false
 Type=Application
 Category=Game;FPP;
 Encoding=UTF-8
+# vi: encoding=utf-8
