@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Quake III SMP
+Comment=Quake3 for linux
+Comment[pl]=Quake3 dla Linuksa
+Exec=quake3-smp
+Icon=quake3.png
+Terminal=false
+Type=Application
+Category=Game;FPP;
+Encoding=UTF-8
+# vi: encoding=utf-8
