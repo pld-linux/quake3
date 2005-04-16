@@ -165,29 +165,29 @@ if [ "$1" = "0" ]; then
 fi
 
 %files
-%defattr(644,quake3,quake3,755)
-%attr(755,quake3,quake3) %{_gamedir}/quake3.x86
-%attr(755,quake3,quake3) %{_bindir}/quake3
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_gamedir}/quake3.x86
+%attr(755,root,root) %{_bindir}/quake3
 %{_desktopdir}/quake3.desktop
 
 %files common
-%defattr(644,quake3,quake3,755)
+%defattr(644,root,root,755)
 %doc Q3A_EULA.txt README-linux.txt pb/PB_EULA.txt
 %dir %{_gamedir}
 %{_gamedir}/baseq3
 %dir %{_gamedir}/pb
 %{_gamedir}/pb/htm
-%attr(755,quake3,quake3) %{_gamedir}/pb/*.so
+%attr(755,root,root) %{_gamedir}/pb/*.so
 %{_pixmapsdir}/quake3.png
 
 %files server
 %defattr(644,quake3,quake3,755)
 %attr(754,root,root) /etc/rc.d/init.d/q3ded
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/q3ded
-%attr(755,quake3,quake3) %{_gamedir}/q3ded
+%attr(755,root,root) %{_gamedir}/q3ded
 
 %files smp
-%defattr(644,quake3,quake3,755)
-%attr(755,quake3,quake3) %{_gamedir}/quake3-smp.x86
-%attr(755,quake3,quake3) %{_bindir}/quake3-smp
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_gamedir}/quake3-smp.x86
+%attr(755,root,root) %{_bindir}/quake3-smp
 %{_desktopdir}/quake3-smp.desktop
