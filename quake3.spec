@@ -112,6 +112,9 @@ cd %{_gamedir}
 ./quake3-smp.x86
 EOF
 
+# make check files happy
+rm -f $RPM_BUILD_ROOT%{_gamedir}/quake3{,-smp}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
