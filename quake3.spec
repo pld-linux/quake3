@@ -15,7 +15,7 @@ Source3:	%{name}.png
 Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 URL:		http://www.idsoftware.com/
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -119,30 +119,15 @@ rm -f $RPM_BUILD_ROOT%{_gamedir}/quake3{,-smp}
 rm -rf $RPM_BUILD_ROOT
 
 %pre common
-if [ -n "`/usr/bin/getgid quake3`" ]; then
-	if [ "`/usr/bin/getgid quake3`" != 38 ]; then
-		echo "Error: group quake3 doesn't have gid=38. Correct this before installing quake3." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 38 quake3
-fi
-if [ -n "`/bin/id -u quake3 2>/dev/null`" ]; then
-	if [ "`/bin/id -u quake3`" != 124 ]; then
-		echo "Error: user quake3 doesn't have uid=124. Correct this before installing quake3." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 124 -d %{_gamedir} -s /bin/bash \
-		-c "Quake ]|[ Arena" -g quake3 quake3 1>&2
-fi
+%groupadd -P %{name}-common -g 38 quake3
+%useradd -P %{name}-common -u 124 -d %{_gamedir} -s /bin/bash -c "Quake ]|[ Arena" -g quake3 quake3
 
 %post common
 if [ "$1" = "1" ]; then
-echo ""
-echo "You need to copy pak0.pk3 from your Quake3 CD into %{_gamedir}/baseq3/."
-echo "Or if you have got a Windows installation of Q3 make a symlink to save space."
-echo ""
+	echo ""
+	echo "You need to copy pak0.pk3 from your Quake3 CD into %{_gamedir}/baseq3/."
+	echo "Or if you have got a Windows installation of Q3 make a symlink to save space."
+	echo ""
 fi
 
 %post server
