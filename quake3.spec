@@ -28,7 +28,7 @@ Requires:	OpenGL
 Requires:	psmisc
 Provides:	group(quake3)
 Provides:	user(quake3)
-ExclusiveArch:	%{ix86} amd64
+ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
