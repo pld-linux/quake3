@@ -6,6 +6,6 @@ Exec=quake3
 Icon=quake3.png
 Terminal=false
 Type=Application
-Categories=Game;FirstPersonGame;
+Categories=Game;X-FPPGame;
 Encoding=UTF-8
 # vi: encoding=utf-8
