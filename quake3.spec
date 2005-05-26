@@ -3,7 +3,7 @@ Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.32b
 %define		_subver	3
-Release:	4
+Release:	5
 Vendor:		id Software
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
