@@ -3,7 +3,7 @@ Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.32b
 %define		_subver	3
-Release:	5
+Release:	6
 Vendor:		id Software
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
@@ -28,7 +28,7 @@ Requires:	OpenGL
 Requires:	psmisc
 Provides:	group(quake3)
 Provides:	user(quake3)
-ExclusiveArch:	%{ix86} %{x8664}
+ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
