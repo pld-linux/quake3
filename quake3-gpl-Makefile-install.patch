@@ -1,0 +1,35 @@
+diff -Nur quake3-1.33_SVN156M.MFfix/code/unix/Makefile quake3-1.33_SVN156M/code/unix/Makefile
+--- quake3-1.33_SVN156M/code/unix/Makefile	2005-10-09 15:07:54.000000000 +0200
++++ quake3-1.33_SVN156M.MFfix/code/unix/Makefile	2005-10-14 03:15:01.000000000 +0200
+@@ -187,18 +187,6 @@
+     TARGETS=\
+       $(B)/$(PLATFORM)quake3 \
+       $(B)/$(PLATFORM)q3ded \
+-      $(B)/baseq3/cgame$(ARCH).$(SHLIBEXT) \
+-      $(B)/baseq3/qagame$(ARCH).$(SHLIBEXT) \
+-      $(B)/baseq3/ui$(ARCH).$(SHLIBEXT)     \
+-      $(B)/missionpack/cgame$(ARCH).$(SHLIBEXT) \
+-      $(B)/missionpack/qagame$(ARCH).$(SHLIBEXT) \
+-      $(B)/missionpack/ui$(ARCH).$(SHLIBEXT) \
+-      $(B)/baseq3/vm/cgame.qvm \
+-      $(B)/baseq3/vm/qagame.qvm \
+-      $(B)/baseq3/vm/ui.qvm \
+-      $(B)/missionpack/vm/qagame.qvm \
+-      $(B)/missionpack/vm/cgame.qvm \
+-      $(B)/missionpack/vm/ui.qvm
+ #      $(B)/$(PLATFORM)quake3-smp \
+ 
+   endif
+@@ -1405,6 +1393,12 @@
+ 	install -s -m 0755 $(BR)/missionpack/ui$(ARCH).$(SHLIBEXT) \
+ 					$(COPYDIR)/missionpack/.
+ 
++install:
++	-mkdir -p -m 0755 $(BINDIR)
++	install -s -m 0755 $(BR)/linuxquake3 $(BINDIR)/quake3
++	#install -s -m 0755 $(BR)/linuxquake3-smp $(BINDIR)/quake3-smp
++	install -s -m 0755 $(BR)/linuxq3ded $(BINDIR)/q3ded
++
+ clean:clean-debug clean-release
+ 
+ clean2:
