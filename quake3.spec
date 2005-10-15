@@ -19,6 +19,7 @@ Source6:	%{name}-smp.desktop
 Patch0:		%{name}-gpl-Makefile-install.patch
 Patch1:		%{name}-alphafix.patch
 URL:		http://icculus.org/quake3/
+BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
 BuildRequires:	rpmbuild(macros) >= 1.245
 Requires:	%{name}-common = %{version}-%{release}
