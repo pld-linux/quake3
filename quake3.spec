@@ -27,7 +27,6 @@ BuildRequires:	SDL-devel
 BuildRequires:	rpmbuild(macros) >= 1.245
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
-Requires:	psmisc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		specflags	-ffast-math -funroll-loops -fomit-frame-pointer -fno-strict-aliasing
@@ -54,6 +53,7 @@ Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	screen
+Requires:	psmisc
 Provides:	group(quake3)
 Provides:	user(quake3)
 
@@ -165,8 +165,8 @@ fi
 
 %postun server
 if [ "$1" = "0" ]; then
-        %userremove quake3
-        %groupremove quake3
+	%userremove quake3
+	%groupremove quake3
 fi
 
 %files
