@@ -1,0 +1,8 @@
+- many fixes, probably some bug introduced too:
+- extract files from linuxq3apoint
+- license of common is Q3A EULA, PB EULA
+- commented out quake user/group stuff, what was it for ?
+- use bindir/datadir and not gamedir
+- -DDEFAULT_BASEDIR=\"%{_datadir}/%{name}\" fixes pak*.pk3 placement search
+- -smp if broken for now
+- TODO: check ppc/sparc; there is no alpha support; (re)add doc files; cleanups
