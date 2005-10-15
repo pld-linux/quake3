@@ -21,7 +21,7 @@ Patch1:		%{name}-alphafix.patch
 URL:		http://icculus.org/quake3/
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
-BuildRequires:	rpmbuild(macros) >= 1.245
+BuildRequires:	rpmbuild(macros) >= 1.202
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -145,7 +145,7 @@ fi
 
 %pre server
 %groupadd -P %{name}-server -g 38 quake3
-%useradd -m -P %{name}-server -u 124 -d /var/games/quake3 -s /bin/sh -c "Quake ]|[ Arena" -g quake3 quake3
+%useradd -P %{name}-server -u 124 -d /var/games/quake3 -s /bin/sh -c "Quake ]|[ Arena" -g quake3 quake3
 
 %post server
 /sbin/chkconfig --add q3ded
