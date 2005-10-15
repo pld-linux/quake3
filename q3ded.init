@@ -40,11 +40,11 @@ case "$action" in
   start)
 	if [ ! -f /var/lock/subsys/q3ded ]; then
 		msg_starting "Quake3 dedicated server"
-		if [ ! -x /opt/quake3/q3ded ]; then
+		if [ ! -x /usr/bin/q3ded ]; then
 			fail
 			exit 1
 		fi
-		screen -A -m -d -S q3ded su - quake3 -c "cd /opt/quake3/ && ./q3ded ${Q3_OPTS}"
+		screen -A -m -d -S q3ded su quake3 -c "/usr/bin/q3ded ${Q3_OPTS}"
 		touch /var/lock/subsys/q3ded && ok
 	else
 		msg_already_running "Quake3 dedicated server"
