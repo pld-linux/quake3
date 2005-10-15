@@ -44,8 +44,8 @@ case "$action" in
 			fail
 			exit 1
 		fi
-		screen -A -m -d -S q3ded su -s /bin/sh quake3 -c "exec /usr/bin/q3ded ${Q3_OPTS}"
-		touch /var/lock/subsys/q3ded && ok
+		su -s /bin/sh - quake3 -c "screen -dmS q3ded /usr/bin/q3ded ${Q3_OPTS}"
+		touch /var/lock/subsys/q3ded && ok || fail
 	else
 		msg_already_running "Quake3 dedicated server"
 	fi
@@ -53,8 +53,7 @@ case "$action" in
   stop)
 	if [ -f /var/lock/subsys/q3ded ]; then
 		msg_stopping "Quake3 dedicated server"
-		rm -f /var/lock/subsys/q3ded >/dev/null 2>&1
-		SCREEN_PID=`screen -ls | grep q3ded | awk -F . '{print $1}' | sed -e s/.//`
+		SCREEN_PID=$(su -s /bin/sh - quake3 -c "screen -ls" | awk -F. '/q3ded/{print $1}')
 		if [ ! -z "$SCREEN_PID" ]; then
 			Q3_PID=`pstree -p ${SCREEN_PID} |\
 				sed -e 's:^.*q3ded:: ; s:(:: ; s:)::'`
@@ -68,6 +67,7 @@ case "$action" in
 		else
 			fail
 		fi
+		rm -f /var/lock/subsys/q3ded >/dev/null 2>&1
 	fi
 	exit 0
 	;;
