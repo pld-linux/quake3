@@ -3,7 +3,7 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-Release:	0.5
+Release:	0.6
 License:	GPL
 Group:		Applications/Games
 Source0:	%{name}-%{version}_SVN156M.tar.bz2
@@ -138,8 +138,8 @@ if [ "$1" = "1" ]; then
 fi
 
 %pre server
-%groupadd -P %{name}-common -g 38 quake3
-%useradd -P %{name}-common -u 124 -d /home/services/quake3 -s /bin/bash -c "Quake ]|[ Arena" -g quake3 quake3
+%groupadd -P %{name}-server -g 38 quake3
+%useradd -m -P %{name}-server -u 124 -d /home/services/quake3 -s /bin/bash -c "Quake ]|[ Arena" -g quake3 quake3
 
 %post server
 /sbin/chkconfig --add q3ded
