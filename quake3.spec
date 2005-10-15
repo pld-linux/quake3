@@ -1,40 +1,33 @@
+%define	_dataver	1.32b-3
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
-Version:	1.32b
-%define		_subver	3
-Release:	6
-Vendor:		id Software
-License:	Q3A EULA, PB EULA
+Version:	1.33
+Release:	0.5
+License:	GPL
 Group:		Applications/Games
-Source0:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{version}-%{_subver}.x86.run
-# Source0-md5:	c71fdddccb20e8fc393d846e9c61d685
-Source1:	q3ded.init
-Source2:	q3ded.sysconfig
-Source3:	%{name}.png
-Source4:	%{name}.desktop
-Source5:	%{name}-smp.desktop
-URL:		http://www.idsoftware.com/
+Source0:	%{name}-%{version}_SVN156M.tar.bz2
+# Source0-md5:	62430cc4fd6963a7ba53da6de7fa5582
+Source1:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{_dataver}.x86.run
+# Source1-md5:	c71fdddccb20e8fc393d846e9c61d685
+Source2:	q3ded.init
+Source3:	q3ded.sysconfig
+Source4:	%{name}.png
+Source5:	%{name}.desktop
+Source6:	%{name}-smp.desktop
+Patch0:		%{name}-gpl-Makefile-install.patch
+URL:		http://icculus.org/quake3/
+BuildRequires:	SDL-devel
+BuildRequires:	byacc
 BuildRequires:	rpmbuild(macros) >= 1.202
-Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
 Requires:	psmisc
-Provides:	group(quake3)
-Provides:	user(quake3)
-ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		no_install_post_strip	1
-
+%define		specflags	-ffast-math -funroll-loops -fomit-frame-pointer -fno-strict-aliasing
+%define		specflags_ia32	-falign-loops=2 -falign-jumps=2 -falign-functions=2
 %define		_noautoreqdep	libGL.so.1 libGLU.so.1
-%define		_gamedir	/opt/quake3
 
 %description
 Quake 3 for Linux.
@@ -46,10 +39,18 @@ Quake 3 dla linuksa.
 Summary:	Quake3 server
 Summary(pl):	Serwer Quake3
 Group:		Applications/Games
-PreReq:		rc-scripts
+Requires:	rc-scripts
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	screen
+Provides:	group(quake3)
+Provides:	user(quake3)
 
 %description server
 Quake3 server.
@@ -72,6 +73,7 @@ Quake3 dla maszyny wieloprocesorowej.
 %package common
 Summary:	Common files for quake3
 Summary(pl):	Pliki wspólne dla quake3
+License:	Q3A EULA, PB EULA
 Group:		Applications/Games
 Obsoletes:	quake3-single
 
@@ -82,53 +84,62 @@ Common files for quake3 server and player game.
 Pliki wspólne quake3 dla serwera i trybu gracza.
 
 %prep
-%setup -qcT
-sh %{SOURCE0} --tar xf
+%setup -q -n %{name}-%{version}_SVN156M
+mkdir data
+sh %{SOURCE1} --tar xfC data
+%patch0 -p1
+
+%build
+CFLAGS="%{rpmcflags}"
+CFLAGS="$CFLAGS -DDEFAULT_BASEDIR=\\\"%{_datadir}/%{name}\\\""
+CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
+CFLAGS="$CFLAGS -DUSE_SDL=1 $(sdl-config --cflags)"
+CFLAGS="$CFLAGS -DNDEBUG -MMD"
+CFLAGS="$CFLAGS -DHAVE_VM_NATIVE"
+%ifarch %{ix86}
+CFLAGS="$CFLAGS -DHAVE_VM_COMPILED"
+%endif
+
+%{__make} -C code/unix makedirs targets	\
+	B="release-%{_target}"	\
+	CC="%{__cc}"		\
+	CFLAGS="$CFLAGS"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
-	$RPM_BUILD_ROOT{%{_gamedir}/{baseq3,pb/{,htm}},%{_bindir}} \
-	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}}
+	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/%{name}/baseq3} \
+	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
+	$RPM_BUILD_ROOT/home/services/quake3
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
-install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
-install %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
-install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}/%{name}-smp.desktop
-install baseq3/* $RPM_BUILD_ROOT%{_gamedir}/baseq3
-install bin/Linux/x86/* $RPM_BUILD_ROOT%{_gamedir}
-install pb/*.so $RPM_BUILD_ROOT%{_gamedir}/pb
-install pb/htm/*.htm $RPM_BUILD_ROOT%{_gamedir}/pb/htm
+%{__make} -C code/unix install	\
+	BR="release-%{_target}"	\
+	BINDIR=$RPM_BUILD_ROOT%{_bindir}		\
+	DATADIR=$RPM_BUILD_ROOT%{_datadir}/%{name}	\
+	LIBDIR=$RPM_BUILD_ROOT%{_libdir}/%{name}
 
-cat << EOF > $RPM_BUILD_ROOT%{_bindir}/quake3
-#!/bin/sh
-cd %{_gamedir}
-./quake3.x86
-EOF
-cat << EOF > $RPM_BUILD_ROOT%{_bindir}/quake3-smp
-#!/bin/sh
-cd %{_gamedir}
-./quake3-smp.x86
-EOF
-
-# make check files happy
-rm -f $RPM_BUILD_ROOT%{_gamedir}/quake3{,-smp}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
+install %{SOURCE4} $RPM_BUILD_ROOT%{_pixmapsdir}
+install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}/quake3.desktop
+install %{SOURCE6} $RPM_BUILD_ROOT%{_desktopdir}/quake3-smp.desktop
+install data/baseq3/pak?.pk3 $RPM_BUILD_ROOT%{_datadir}/%{name}/baseq3
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre common
-%groupadd -P %{name}-common -g 38 quake3
-%useradd -P %{name}-common -u 124 -d %{_gamedir} -s /bin/bash -c "Quake ]|[ Arena" -g quake3 quake3
-
 %post common
 if [ "$1" = "1" ]; then
 	echo ""
-	echo "You need to copy pak0.pk3 from your Quake3 CD into %{_gamedir}/baseq3/."
+	echo "You need to copy pak0.pk3 from your Quake3 CD into %{_datadir}/%{name}/baseq3/."
 	echo "Or if you have got a Windows installation of Q3 make a symlink to save space."
+	echo "You may place it in ~/.q3a/baseq3/ but you will have to put all pak files there (or make symlinks)."
 	echo ""
 fi
+
+%pre server
+%groupadd -P %{name}-common -g 38 quake3
+%useradd -P %{name}-common -u 124 -d /home/services/quake3 -s /bin/bash -c "Quake ]|[ Arena" -g quake3 quake3
 
 %post server
 /sbin/chkconfig --add q3ded
@@ -146,36 +157,34 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del q3ded
 fi
 
-%postun common
+%postun server
 if [ "$1" = "0" ]; then
-	%userremove quake3
-	%groupremove quake3
+        %userremove quake3
+        %groupremove quake3
 fi
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_gamedir}/quake3.x86
 %attr(755,root,root) %{_bindir}/quake3
 %{_desktopdir}/quake3.desktop
 
 %files common
 %defattr(644,root,root,755)
-%doc Q3A_EULA.txt README-linux.txt pb/PB_EULA.txt
-%dir %{_gamedir}
-%{_gamedir}/baseq3
-%dir %{_gamedir}/pb
-%{_gamedir}/pb/htm
-%attr(755,root,root) %{_gamedir}/pb/*.so
+%doc id-readme.txt i_o-q3-readme data/Q3A_EULA.txt data/README-linux.txt data/pb/PB_EULA.txt
+%{_datadir}/%{name}
 %{_pixmapsdir}/quake3.png
 
 %files server
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/q3ded
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/q3ded
-%attr(755,root,root) %{_gamedir}/q3ded
+%attr(755,root,root) %{_bindir}/q3ded
+%attr(750,quake3,quake3) /home/services/quake3
 
+%if 0
+# broken
 %files smp
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_gamedir}/quake3-smp.x86
 %attr(755,root,root) %{_bindir}/quake3-smp
 %{_desktopdir}/quake3-smp.desktop
+%endif
