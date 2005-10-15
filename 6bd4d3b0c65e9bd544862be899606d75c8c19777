@@ -1,0 +1,1 @@
+- chown quake3.quake3 for %{_bindir}/q3ded
