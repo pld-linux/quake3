@@ -1,0 +1,24 @@
+diff -ur quake3/code/unix/Makefile quake3.alpha-fix/code/unix/Makefile
+--- quake3/code/unix/Makefile	2005-10-15 18:02:11.000000000 +0200
++++ quake3.alpha-fix/code/unix/Makefile	2005-10-15 18:03:31.000000000 +0200
+@@ -98,7 +98,7 @@
+   CXX=g++
+ 
+   ifeq ($(ARCH),alpha)
+-    ARCH=axp
++    LIB=lib64
+   else
+   ifeq ($(ARCH),x86_64)
+     LIB=lib64
+diff -ur quake3/code/unix/unix_main.c quake3.alpha-fix/code/unix/unix_main.c
+--- quake3/code/unix/unix_main.c	2005-10-15 15:34:29.000000000 +0200
++++ quake3.alpha-fix/code/unix/unix_main.c	2005-10-15 18:04:45.000000000 +0200
+@@ -771,7 +771,7 @@
+   snprintf (fname, sizeof(fname), "%ss390x.so", name);
+ #elif defined __ia64__
+   snprintf (fname, sizeof(fname), "%sia64.so", name);
+-#elif defined __axp__
++#elif ( defined __axp__ || defined __alpha__ )
+   snprintf (fname, sizeof(fname), "%saxp.so", name);
+ #elif defined __mips__
+   snprintf (fname, sizeof(fname), "%smips.so", name);
