@@ -51,6 +51,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
+Requires(triggerpostun):	/usr/sbin/usermod
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	screen
 Requires:	psmisc
@@ -146,6 +147,11 @@ fi
 %pre server
 %groupadd -P %{name}-server -g 38 quake3
 %useradd -m -P %{name}-server -u 124 -d /home/services/quake3 -s /bin/sh -c "Quake ]|[ Arena" -g quake3 quake3
+
+%triggerpostun server -- %{name}-common < 1.33
+if [ "`getent passwd quake3 | cut -d: -f6`" = "/opt/quake3" ]; then
+	/usr/sbin/usermod -d /home/services/quake3 quake3 -s /bin/sh
+fi
 
 %post server
 /sbin/chkconfig --add q3ded
