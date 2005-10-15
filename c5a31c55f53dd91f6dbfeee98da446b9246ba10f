@@ -1,0 +1,3 @@
+- restored user/group add/remove but only for -server
+- cleanup
+- release 0.4
