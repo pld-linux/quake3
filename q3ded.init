@@ -44,7 +44,7 @@ case "$action" in
 			fail
 			exit 1
 		fi
-		screen -A -m -d -S q3ded su quake3 -c "exec /usr/bin/q3ded ${Q3_OPTS}"
+		screen -A -m -d -S q3ded su -s /bin/sh quake3 -c "exec /usr/bin/q3ded ${Q3_OPTS}"
 		touch /var/lock/subsys/q3ded && ok
 	else
 		msg_already_running "Quake3 dedicated server"
