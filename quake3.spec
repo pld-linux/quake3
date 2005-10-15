@@ -3,11 +3,12 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-Release:	0.6
+%define	_snap	20051014
+Release:	0.%{_snap}.0.1
 License:	GPL
 Group:		Applications/Games
-Source0:	%{name}-%{version}_SVN156M.tar.bz2
-# Source0-md5:	62430cc4fd6963a7ba53da6de7fa5582
+Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
+# Source0-md5:	2e1d5a9f20ade02cf52b5179eac16587
 Source1:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{_dataver}.x86.run
 # Source1-md5:	c71fdddccb20e8fc393d846e9c61d685
 Source2:	q3ded.init
@@ -84,7 +85,7 @@ Common files for quake3 server and player game.
 Pliki wspólne quake3 dla serwera i trybu gracza.
 
 %prep
-%setup -q -n %{name}-%{version}_SVN156M
+%setup -q -n %{name}
 mkdir data
 sh %{SOURCE1} --tar xfC data
 %patch0 -p1
@@ -139,7 +140,7 @@ fi
 
 %pre server
 %groupadd -P %{name}-server -g 38 quake3
-%useradd -m -P %{name}-server -u 124 -d /home/services/quake3 -s /bin/bash -c "Quake ]|[ Arena" -g quake3 quake3
+%useradd -m -P %{name}-server -u 124 -d /home/services/quake3 -s /bin/false -c "Quake ]|[ Arena" -g quake3 quake3
 
 %post server
 /sbin/chkconfig --add q3ded
