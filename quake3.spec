@@ -146,7 +146,7 @@ fi
 
 %pre server
 %groupadd -P %{name}-server -g 38 quake3
-%useradd -m -P %{name}-server -u 124 -d /home/services/quake3 -s /bin/false -c "Quake ]|[ Arena" -g quake3 quake3
+%useradd -m -P %{name}-server -u 124 -d /home/services/quake3 -s /bin/sh -c "Quake ]|[ Arena" -g quake3 quake3
 
 %post server
 /sbin/chkconfig --add q3ded
