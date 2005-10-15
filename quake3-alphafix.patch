@@ -18,7 +18,7 @@ diff -ur quake3/code/unix/unix_main.c quake3.alpha-fix/code/unix/unix_main.c
  #elif defined __ia64__
    snprintf (fname, sizeof(fname), "%sia64.so", name);
 -#elif defined __axp__
-+#elif ( defined __axp__ || defined __alpha__ )
++#elif 1
    snprintf (fname, sizeof(fname), "%saxp.so", name);
  #elif defined __mips__
    snprintf (fname, sizeof(fname), "%smips.so", name);
