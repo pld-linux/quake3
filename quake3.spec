@@ -24,7 +24,6 @@ Patch0:		%{name}-gpl-Makefile-install.patch
 Patch1:		%{name}-alphafix.patch
 URL:		http://icculus.org/quake3/
 BuildRequires:	SDL-devel
-BuildRequires:	byacc
 BuildRequires:	rpmbuild(macros) >= 1.245
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
