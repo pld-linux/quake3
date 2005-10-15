@@ -4,7 +4,7 @@ Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
 %define	_snap	20051014
-Release:	0.%{_snap}.0.9
+Release:	0.%{_snap}.0.10
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
@@ -77,6 +77,8 @@ Summary:	Common files for quake3
 Summary(pl):	Pliki wspólne dla quake3
 License:	Q3A EULA, PB EULA
 Group:		Applications/Games
+Requires(triggerpostun):	/usr/sbin/groupdel
+Requires(triggerpostun):	/usr/sbin/userdel
 Obsoletes:	quake3-single
 
 %description common
@@ -185,8 +187,8 @@ fi
 %files common
 %defattr(644,root,root,755)
 %doc id-readme.txt i_o-q3-readme data/Q3A_EULA.txt data/README-linux.txt data/pb/PB_EULA.txt
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/*
+%dir %{_datadir}/games/%{name}
+%{_datadir}/games/%{name}/*
 %{_pixmapsdir}/quake3.png
 
 %files server
