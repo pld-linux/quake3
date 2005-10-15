@@ -1,3 +1,7 @@
+# TODO:
+#  - some trigger for upgrating from binary version
+#    (quake3 user home/shell changes)
+#
 %define	_dataver	1.32b-3
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
@@ -17,6 +21,7 @@ Source4:	%{name}.png
 Source5:	%{name}.desktop
 Source6:	%{name}-smp.desktop
 Patch0:		%{name}-gpl-Makefile-install.patch
+Patch1:		%{name}-alphafix.patch
 URL:		http://icculus.org/quake3/
 BuildRequires:	SDL-devel
 BuildRequires:	byacc
@@ -89,6 +94,7 @@ Pliki wspólne quake3 dla serwera i trybu gracza.
 mkdir data
 sh %{SOURCE1} --tar xfC data
 %patch0 -p1
+%patch1 -p1
 
 %build
 CFLAGS="%{rpmcflags}"
