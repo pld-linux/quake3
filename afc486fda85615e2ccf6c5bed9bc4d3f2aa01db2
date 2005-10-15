@@ -1,0 +1,1 @@
+- Requires(post,preun,pre,postun) moved to -server package
