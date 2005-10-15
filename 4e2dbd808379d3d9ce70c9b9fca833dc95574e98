@@ -1,0 +1,2 @@
+- used %{__make} copyfiles in %install
+- added BR: sed >= 4.0 cause changed COPYFILES directory
