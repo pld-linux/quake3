@@ -3,12 +3,12 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20051014
-Release:	0.%{_snap}.0.10
+%define	_snap	20051027
+Release:	0.%{_snap}.0.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	2e1d5a9f20ade02cf52b5179eac16587
+# Source0-md5:	6c0467619dd0a4c63b9e7a74be14aba1
 Source1:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{_dataver}.x86.run
 # Source1-md5:	c71fdddccb20e8fc393d846e9c61d685
 Source2:	q3ded.init
