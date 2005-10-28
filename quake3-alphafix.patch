@@ -13,12 +13,12 @@ diff -ur quake3/code/unix/Makefile quake3.alpha-fix/code/unix/Makefile
 diff -ur quake3/code/unix/unix_main.c quake3.alpha-fix/code/unix/unix_main.c
 --- quake3/code/unix/unix_main.c	2005-10-15 15:34:29.000000000 +0200
 +++ quake3.alpha-fix/code/unix/unix_main.c	2005-10-15 18:04:45.000000000 +0200
-@@ -771,7 +771,7 @@
-   snprintf (fname, sizeof(fname), "%ss390x.so", name);
- #elif defined __ia64__
-   snprintf (fname, sizeof(fname), "%sia64.so", name);
--#elif defined __axp__
-+#elif 1
-   snprintf (fname, sizeof(fname), "%saxp.so", name);
- #elif defined __mips__
-   snprintf (fname, sizeof(fname), "%smips.so", name);
+@@ -802,7 +802,7 @@
+ #elif defined __sh__
+   snprintf (fname, sizeof(fname), "%ssh.so", name);
+ #else
+-#error Unknown arch
++  snprintf (fname, sizeof(fname), "%sother.so", name);
+ #endif
+ 
+   // TODO: use fs_searchpaths from files.c
