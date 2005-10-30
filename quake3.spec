@@ -101,9 +101,8 @@ CFLAGS="$CFLAGS -DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\""
 CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
 CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
-CFLAGS="$CFLAGS -DHAVE_VM_NATIVE"
-%ifarch %{ix86}
-CFLAGS="$CFLAGS -DHAVE_VM_COMPILED"
+%ifnarch %{ix86} #%{x8664} - experimental
+CFLAGS="$CFLAGS -DNO_VM_COMPILED"
 %endif
 
 %{__make} -C code/unix makedirs targets	\
