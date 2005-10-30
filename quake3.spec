@@ -3,12 +3,12 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20051027
+%define	_snap	20051029
 Release:	0.%{_snap}.0.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	6c0467619dd0a4c63b9e7a74be14aba1
+# Source0-md5:	0ab0f7a3323bfdb11230627d5928c2d5
 Source1:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{_dataver}.x86.run
 # Source1-md5:	c71fdddccb20e8fc393d846e9c61d685
 Source2:	q3ded.init
@@ -99,7 +99,7 @@ sh %{SOURCE1} --tar xfC data
 CFLAGS="%{rpmcflags}"
 CFLAGS="$CFLAGS -DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\""
 CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
-CFLAGS="$CFLAGS -DUSE_SDL=1 $(sdl-config --cflags)"
+CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
 CFLAGS="$CFLAGS -DHAVE_VM_NATIVE"
 %ifarch %{ix86}
@@ -187,7 +187,8 @@ fi
 
 %files common
 %defattr(644,root,root,755)
-%doc id-readme.txt i_o-q3-readme data/Q3A_EULA.txt data/README-linux.txt data/pb/PB_EULA.txt
+%doc id-readme.txt i_o-q3-readme ChangeLog STATUS TODO 
+%doc data/Q3A_EULA.txt data/README-linux.txt data/pb/PB_EULA.txt
 %dir %{_datadir}/games/%{name}
 %{_datadir}/games/%{name}/*
 %{_pixmapsdir}/quake3.png
