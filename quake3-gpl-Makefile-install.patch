@@ -37,9 +37,9 @@ diff -ru quake3/code/unix/Makefile quake3.Mf/code/unix/Makefile
  
 +install:
 +	-mkdir -p -m 0755 $(BINDIR)
-+	install -s -m 0755 $(BR)/$(PLATFORM)quake3$(BINEXT) $(BINDIR)/quake3
-+	#install -s -m 0755 $(BR)/$(PLATFORM)quake3-smp$(BINEXT) $(BINDIR)/quake3-smp
-+	install -s -m 0755 $(BR)/$(PLATFORM)q3ded$(BINEXT) $(BINDIR)/q3ded
++	install -m 0755 $(BR)/$(PLATFORM)quake3$(BINEXT) $(BINDIR)/quake3
++	#install -m 0755 $(BR)/$(PLATFORM)quake3-smp$(BINEXT) $(BINDIR)/quake3-smp
++	install -m 0755 $(BR)/$(PLATFORM)q3ded$(BINEXT) $(BINDIR)/q3ded
 +
  clean:clean-debug clean-release
  
