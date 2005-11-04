@@ -1,16 +1,14 @@
-%define	_dataver	1.32b-3
+%define	_dataver	1.32b3
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
 %define	_snap	20051103
-Release:	0.%{_snap}.0.1
+Release:	0.%{_snap}.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
 # Source0-md5:	db4168a93a253a795095c6a461bfd7e9
-Source1:	ftp://ftp.idsoftware.com/idstuff/quake3/linux/linuxq3apoint-%{_dataver}.x86.run
-# Source1-md5:	c71fdddccb20e8fc393d846e9c61d685
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
@@ -80,6 +78,8 @@ License:	Q3A EULA, PB EULA
 Group:		Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
+Requires:	quake3-data >= %{_dataver}-1
+Obsoletes:	%{name}-smp
 Obsoletes:	quake3-single
 
 %description common
@@ -90,8 +90,6 @@ Pliki wspólne quake3 dla serwera i trybu gracza.
 
 %prep
 %setup -q -n %{name}
-mkdir data
-sh %{SOURCE1} --tar xfC data
 %patch0 -p1
 %patch1 -p1
 
@@ -129,7 +127,6 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
 install %{SOURCE4} $RPM_BUILD_ROOT%{_pixmapsdir}
 install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}/quake3.desktop
 install %{SOURCE6} $RPM_BUILD_ROOT%{_desktopdir}/quake3-smp.desktop
-install data/baseq3/pak?.pk3 $RPM_BUILD_ROOT%{_datadir}/games/%{name}/baseq3
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -170,11 +167,21 @@ if [ "$1" = "0" ]; then
 fi
 
 %triggerpostun server -- %{name}-server < 1.33
+if [ -f /var/lock/subsys/q3ded ]; then
+	# server will fail because of lack of pak0.pk3
+	/etc/rc.d/init.d/q3ded stop 1>&2
+fi
 if [ "`getent passwd quake3 | cut -d: -f6`" = "/opt/quake3" ]; then
 	/usr/sbin/usermod -d /var/games/quake3 -s /bin/sh quake3
 fi
 
 %triggerpostun common -- %{name}-common < 1.33
+if [ ! -f %{_datadir}/games/%{name}/baseq3/pak0.pk3 ]; then
+	# Better don't link/move automatically, /opt may be on other partition than /usr
+	echo ""
+	echo "Quake 3 data location has changed, link or move pak0.pk3 to %{_datadir}/games/%{name}/baseq3/."
+	echo ""
+fi
 if [ "$1" = "0" ]; then
 	%userremove quake3
 	%groupremove quake3
@@ -188,9 +195,8 @@ fi
 %files common
 %defattr(644,root,root,755)
 %doc id-readme.txt i_o-q3-readme ChangeLog STATUS TODO 
-%doc data/Q3A_EULA.txt data/README-linux.txt data/pb/PB_EULA.txt
 %dir %{_datadir}/games/%{name}
-%{_datadir}/games/%{name}/*
+%dir %{_datadir}/games/%{name}/baseq3
 %{_pixmapsdir}/quake3.png
 
 %files server
