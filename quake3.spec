@@ -74,7 +74,6 @@ Quake3 dla maszyny wieloprocesorowej.
 %package common
 Summary:	Common files for quake3
 Summary(pl):	Pliki wspólne dla quake3
-License:	Q3A EULA, PB EULA
 Group:		Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
