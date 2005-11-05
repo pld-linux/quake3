@@ -1,0 +1,4 @@
+- separated data
+- O: smp in common (for now)
+- some info in trigger
+- rel 1, stbr (ac-test at last); status: ix86, x86_64, ppc works, other don't but builds
