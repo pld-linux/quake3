@@ -193,7 +193,7 @@ fi
 
 %files common
 %defattr(644,root,root,755)
-%doc id-readme.txt i_o-q3-readme ChangeLog STATUS TODO 
+%doc id-readme.txt i_o-q3-readme ChangeLog STATUS TODO
 %dir %{_datadir}/games/%{name}
 %dir %{_datadir}/games/%{name}/baseq3
 %{_pixmapsdir}/quake3.png
