@@ -1,0 +1,12 @@
+--- quake3/code/unix/unix_main.c~	2005-11-05 01:47:40.000000000 +0100
++++ quake3/code/unix/unix_main.c	2005-11-06 18:17:46.000000000 +0100
+@@ -735,6 +735,9 @@
+   if(!libHandle && homepath)
+     libHandle = try_dlopen(homepath, gamedir, fname, fqpath);
+ 
++  if(!libHandle)
++    libHandle = try_dlopen(QUAKELIBDIR, gamedir, fname, fqpath);
++
+   if(!libHandle && basepath)
+     libHandle = try_dlopen(basepath, gamedir, fname, fqpath);
+ 
