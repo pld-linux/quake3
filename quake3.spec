@@ -3,19 +3,19 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20051103
+%define	_snap	20051105
 Release:	0.%{_snap}.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	db4168a93a253a795095c6a461bfd7e9
+# Source0-md5:	915ba37078aa102908617db577b79599
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
 Source5:	%{name}.desktop
 Source6:	%{name}-smp.desktop
 Patch0:		%{name}-gpl-Makefile-install.patch
-Patch1:		%{name}-alphafix.patch
+Patch1:		%{name}-QUAKELIBDIR.patch
 URL:		http://icculus.org/quake3/
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
@@ -95,6 +95,7 @@ Pliki wspólne quake3 dla serwera i trybu gracza.
 %build
 CFLAGS="%{rpmcflags}"
 CFLAGS="$CFLAGS -DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\""
+CFLAGS="$CFLAGS -DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\""
 CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
 CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
@@ -118,8 +119,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 %{__make} -C code/unix install	\
 	BR="release-%{_target}"	\
 	BINDIR=$RPM_BUILD_ROOT%{_bindir}		\
-	DATADIR=$RPM_BUILD_ROOT%{_datadir}/games/%{name}	\
-	LIBDIR=$RPM_BUILD_ROOT%{_libdir}/%{name}
+	Q3LIBDIR=$RPM_BUILD_ROOT%{_libdir}/%{name}
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
@@ -193,10 +193,15 @@ fi
 
 %files common
 %defattr(644,root,root,755)
-%doc id-readme.txt i_o-q3-readme ChangeLog STATUS TODO
+%doc id-readme.txt i_o-q3-readme ChangeLog TODO web/include/status.php
 %dir %{_datadir}/games/%{name}
 %dir %{_datadir}/games/%{name}/baseq3
 %{_pixmapsdir}/quake3.png
+%dir %{_libdir}/%{name}
+%dir %{_libdir}/%{name}/baseq3
+%dir %{_libdir}/%{name}/missionpack
+%attr(755,root,root) %{_libdir}/%{name}/baseq3/*.so
+%attr(755,root,root) %{_libdir}/%{name}/missionpack/*.so
 
 %files server
 %defattr(644,root,root,755)
