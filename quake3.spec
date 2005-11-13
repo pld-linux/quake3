@@ -1,14 +1,18 @@
+#
+# Conditional build:
+%bcond_with	altivec		# use altivec, no runtime detection
+
 %define	_dataver	1.32b3
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20051105
+%define	_snap	20051112
 Release:	0.%{_snap}.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	915ba37078aa102908617db577b79599
+# Source0-md5:	8ed82ca4cf0aed0d9e7ce22f19d4ec01
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
@@ -26,6 +30,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		specflags	-ffast-math -funroll-loops -fomit-frame-pointer -fno-strict-aliasing
 %define		specflags_ia32	-falign-loops=2 -falign-jumps=2 -falign-functions=2
+%if %{with altivec}
+%define		specflags_ppc	-maltivec -mabi=altivec
+%endif
 %define		_noautoreqdep	libGL.so.1 libGLU.so.1
 
 %description
