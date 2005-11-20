@@ -7,12 +7,12 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20051112
+%define	_snap	20051119
 Release:	0.%{_snap}.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	8ed82ca4cf0aed0d9e7ce22f19d4ec01
+# Source0-md5:	bc00af2685e26292245aad93b6522cdc
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
@@ -21,6 +21,7 @@ Source6:	%{name}-smp.desktop
 Patch0:		%{name}-gpl-Makefile-install.patch
 Patch1:		%{name}-QUAKELIBDIR.patch
 URL:		http://icculus.org/quake3/
+BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
 BuildRequires:	rpmbuild(macros) >= 1.202
@@ -105,6 +106,7 @@ CFLAGS="$CFLAGS -DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\""
 CFLAGS="$CFLAGS -DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\""
 CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
 CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
+CFLAGS="$CFLAGS -DUSE_OPENAL=1" # -DUSE_OPENAL_DLOPEN=1"
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
 %ifnarch %{ix86}
 # %{x8664} - experimental and broken
@@ -200,7 +202,7 @@ fi
 
 %files common
 %defattr(644,root,root,755)
-%doc id-readme.txt i_o-q3-readme ChangeLog TODO web/include/status.php
+%doc id-readme.txt README ChangeLog TODO web/include/status.php
 %dir %{_datadir}/games/%{name}
 %dir %{_datadir}/games/%{name}/baseq3
 %{_pixmapsdir}/quake3.png
