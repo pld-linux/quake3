@@ -1,9 +1,9 @@
-diff -ru quake3/code/unix/Makefile quake3.Mf/code/unix/Makefile
---- quake3/code/unix/Makefile	2005-11-01 01:42:04.000000000 +0100
-+++ quake3.Mf/code/unix/Makefile	2005-11-01 12:19:21.000000000 +0100
-@@ -103,9 +103,6 @@
+diff -ur quake3/code/unix/Makefile quake3.Makefile/code/unix/Makefile
+--- quake3/code/unix/Makefile	2005-12-05 02:38:48.000000000 +0100
++++ quake3.Makefile/code/unix/Makefile	2005-12-05 17:42:51.000000000 +0100
+@@ -123,9 +123,6 @@
+   GLIBC=-glibc
    CC=gcc
-   CXX=g++
  
 -  ifeq ($(ARCH),alpha)
 -    ARCH=axp
@@ -11,15 +11,15 @@ diff -ru quake3/code/unix/Makefile quake3.Mf/code/unix/Makefile
    ifeq ($(ARCH),x86_64)
      LIB=lib64
    else
-@@ -117,7 +114,6 @@
+@@ -137,7 +134,6 @@
    endif
    endif
    endif
 -  endif
  
-   BASE_CFLAGS = -pipe -Wall -fno-strict-aliasing
+   BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes -pipe
  
-@@ -191,13 +187,7 @@
+@@ -225,13 +221,7 @@
        $(B)/missionpack/cgame$(ARCH).$(SHLIBEXT) \
        $(B)/missionpack/qagame$(ARCH).$(SHLIBEXT) \
        $(B)/missionpack/ui$(ARCH).$(SHLIBEXT) \
@@ -34,7 +34,7 @@ diff -ru quake3/code/unix/Makefile quake3.Mf/code/unix/Makefile
  
    endif
  
-@@ -1558,25 +1548,25 @@
+@@ -1762,25 +1752,25 @@
  # MISC
  #############################################################################
  
@@ -57,7 +57,7 @@ diff -ru quake3/code/unix/Makefile quake3.Mf/code/unix/Makefile
 -					$(COPYDIR)/missionpack/.
 -	$(INSTALL) -s -m 0755 $(BR)/missionpack/ui$(ARCH).$(SHLIBEXT) \
 -					$(COPYDIR)/missionpack/.
-+install: build_release
++install:
 +	-$(MKDIR) -p -m 0755 $(BINDIR)/baseq3
 +	$(INSTALL) -m 0755 $(BR)/$(PLATFORM)quake3$(BINEXT) $(BINDIR)/quake3
 +	#$(INSTALL) -m 0755 $(BR)/$(PLATFORM)quake3-smp$(BINEXT) $(BINDIR)/quake3-smp
@@ -78,4 +78,5 @@ diff -ru quake3/code/unix/Makefile quake3.Mf/code/unix/Makefile
 +					$(Q3LIBDIR)/missionpack/.
  
  clean:clean-debug clean-release
- 
+ 	$(MAKE) -C setup clean
+Només a quake3.Makefile/code/unix: Makefile~
