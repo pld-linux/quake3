@@ -1,18 +1,19 @@
 #
 # Conditional build:
 %bcond_with	altivec		# use altivec, no runtime detection
+%bcond_without	openal		# don't use OpenAL
 
 %define	_dataver	1.32b3
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20051204
+%define	_snap	20051221
 Release:	0.%{_snap}.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	a711ff61e8bad25822e6554deae5f6a3
+# Source0-md5:	034a93700d3feb207ad3cc7491f25d8c
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
@@ -21,7 +22,9 @@ Source6:	%{name}-smp.desktop
 Patch0:		%{name}-gpl-Makefile-install.patch
 Patch1:		%{name}-QUAKELIBDIR.patch
 URL:		http://icculus.org/quake3/
+%if %{with openal}
 BuildRequires:	OpenAL-devel
+%endif
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
 BuildRequires:	rpmbuild(macros) >= 1.202
@@ -106,7 +109,9 @@ CFLAGS="$CFLAGS -DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\""
 CFLAGS="$CFLAGS -DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\""
 CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
 CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
+%if %{with openal}
 CFLAGS="$CFLAGS -DUSE_OPENAL=1" # -DUSE_OPENAL_DLOPEN=1"
+%endif
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
 %ifnarch %{ix86}
 # %{x8664} - experimental and broken
