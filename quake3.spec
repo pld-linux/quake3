@@ -8,12 +8,12 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20051221
-Release:	0.%{_snap}.1
+%define	_snap	20060122
+Release:	0.%{_snap}.0.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	034a93700d3feb207ad3cc7491f25d8c
+# Source0-md5:	61589f454bb31b002fcdddb8d4381981
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
@@ -89,7 +89,6 @@ Group:		Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
 Requires:	quake3-data >= %{_dataver}-1
-Obsoletes:	%{name}-smp
 Obsoletes:	quake3-single
 
 %description common
@@ -102,6 +101,13 @@ Pliki wspólne quake3 dla serwera i trybu gracza.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
+cat << EOF > Makefile.local
+BUILD_CLIENT     = 1
+BUILD_CLIENT_SMP = 1
+BUILD_SERVER     = 1
+BUILD_GAME_SO    = 1
+BUILD_GAME_QVM   = 0
+EOF
 
 %build
 CFLAGS="%{rpmcflags}"
@@ -110,7 +116,8 @@ CFLAGS="$CFLAGS -DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\""
 CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
 CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
 %if %{with openal}
-CFLAGS="$CFLAGS -DUSE_OPENAL=1" # -DUSE_OPENAL_DLOPEN=1"
+CFLAGS="$CFLAGS -DUSE_OPENAL=1"
+# -DUSE_OPENAL_DLOPEN=1"
 %endif
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
 %ifnarch %{ix86}
@@ -118,7 +125,7 @@ CFLAGS="$CFLAGS -DNDEBUG -MMD"
 CFLAGS="$CFLAGS -DNO_VM_COMPILED"
 %endif
 
-%{__make} -C code/unix makedirs targets	\
+%{__make} makedirs tools targets \
 	B="release-%{_target}"	\
 	CC="%{__cc}"		\
 	CFLAGS="$CFLAGS"
@@ -130,7 +137,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT/var/games/quake3
 
-%{__make} -C code/unix install	\
+%{__make} install \
 	BR="release-%{_target}"	\
 	BINDIR=$RPM_BUILD_ROOT%{_bindir}		\
 	Q3LIBDIR=$RPM_BUILD_ROOT%{_libdir}/%{name}
@@ -224,10 +231,7 @@ fi
 %attr(755,root,root) %{_bindir}/q3ded
 %attr(750,quake3,quake3) /var/games/quake3
 
-%if 0
-# broken
 %files smp
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/quake3-smp
 %{_desktopdir}/quake3-smp.desktop
-%endif
