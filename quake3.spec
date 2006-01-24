@@ -9,7 +9,7 @@ Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
 %define	_snap	20060122
-Release:	0.%{_snap}.0.1
+Release:	0.%{_snap}.0.2
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
@@ -120,8 +120,7 @@ CFLAGS="$CFLAGS -DUSE_OPENAL=1"
 # -DUSE_OPENAL_DLOPEN=1"
 %endif
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
-%ifnarch %{ix86}
-# %{x8664} - experimental and broken
+%ifnarch %{ix86} %{x8664}
 CFLAGS="$CFLAGS -DNO_VM_COMPILED"
 %endif
 
