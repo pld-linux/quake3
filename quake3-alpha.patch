@@ -1,0 +1,11 @@
+--- quake3/code/tools/lcc/cpp/cpp.h.orig	2005-11-02 01:23:49.000000000 +0100
++++ quake3/code/tools/lcc/cpp/cpp.h	2006-01-25 10:53:21.000000000 +0100
+@@ -10,7 +10,7 @@
+ #define NULL	0
+ #endif
+ 
+-#ifndef __alpha
++#if !defined(__alpha) || defined(__linux__)
+ typedef unsigned char uchar;
+ #endif
+ 
