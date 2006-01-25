@@ -21,6 +21,7 @@ Source5:	%{name}.desktop
 Source6:	%{name}-smp.desktop
 Patch0:		%{name}-gpl-Makefile-install.patch
 Patch1:		%{name}-QUAKELIBDIR.patch
+Patch2:		%{name}-alpha.patch
 URL:		http://icculus.org/quake3/
 %if %{with openal}
 BuildRequires:	OpenAL-devel
@@ -101,6 +102,7 @@ Pliki wspólne quake3 dla serwera i trybu gracza.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 cat << EOF > Makefile.local
 BUILD_CLIENT     = 1
 BUILD_CLIENT_SMP = 1
