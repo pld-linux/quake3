@@ -8,12 +8,12 @@ Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20060123
+%define	_snap	20060223
 Release:	0.%{_snap}.1
 License:	GPL
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	1e3239045aa98fb32f08c6f970ce403b
+# Source0-md5:	abccc686942c3f5f3b24c56a4ae68f43
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
@@ -104,11 +104,14 @@ Pliki wspólne quake3 dla serwera i trybu gracza.
 %patch1 -p1
 %patch2 -p1
 cat << EOF > Makefile.local
-BUILD_CLIENT     = 1
-BUILD_CLIENT_SMP = 1
-BUILD_SERVER     = 1
-BUILD_GAME_SO    = 1
-BUILD_GAME_QVM   = 0
+BUILD_CLIENT	= 1
+BUILD_CLIENT_SMP= 1
+BUILD_SERVER	= 1
+BUILD_GAME_SO	= 1
+BUILD_GAME_QVM	= 0
+%if %{without openal}
+USE_OPENAL	= 0
+%endif
 EOF
 
 %build
@@ -119,7 +122,6 @@ CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
 CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
 %if %{with openal}
 CFLAGS="$CFLAGS -DUSE_OPENAL=1"
-# -DUSE_OPENAL_DLOPEN=1"
 %endif
 CFLAGS="$CFLAGS -DNDEBUG -MMD"
 %ifnarch %{ix86} %{x8664}
@@ -128,9 +130,6 @@ CFLAGS="$CFLAGS -DNO_VM_COMPILED"
 
 %{__make} makedirs tools targets \
 	B="release-%{_target}"	\
-%if %{without openal}
-	USE_OPENAL=0		\
-%endif
 	CC="%{__cc}"		\
 	CFLAGS="$CFLAGS"
 
