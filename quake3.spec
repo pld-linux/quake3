@@ -44,7 +44,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Quake 3 for Linux.
 
 %description -l pl
-Quake 3 dla linuksa.
+Quake 3 dla Linuksa.
 
 %package server
 Summary:	Quake3 server
