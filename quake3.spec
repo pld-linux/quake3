@@ -4,11 +4,11 @@
 %bcond_without	openal		# don't use OpenAL
 
 %define	_dataver	1.32b3
+%define	_snap	20060301
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
-%define	_snap	20060301
 Release:	0.%{_snap}.1
 License:	GPL v2
 Group:		Applications/Games
@@ -28,7 +28,7 @@ BuildRequires:	OpenAL-devel
 %endif
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -50,18 +50,18 @@ Quake 3 dla Linuksa.
 Summary:	Quake3 server
 Summary(pl):	Serwer Quake3
 Group:		Applications/Games
-Requires:	rc-scripts
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
 Requires(triggerpostun):	/usr/sbin/usermod
 Requires:	%{name}-common = %{version}-%{release}
-Requires:	screen
 Requires:	psmisc
+Requires:	rc-scripts
+Requires:	screen
 Provides:	group(quake3)
 Provides:	user(quake3)
 
@@ -170,17 +170,11 @@ fi
 
 %post server
 /sbin/chkconfig --add q3ded
-if [ -f /var/lock/subsys/q3ded ]; then
-	/etc/rc.d/init.d/q3ded restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/q3ded start\" to start Quake3 server"
-fi
+%service q3ded restart "Quake3 server"
 
 %preun server
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/q3ded ]; then
-		/etc/rc.d/init.d/q3ded stop 1>&2
-	fi
+	%service q3ded stop
 	/sbin/chkconfig --del q3ded
 fi
 
@@ -193,7 +187,7 @@ fi
 %triggerpostun server -- %{name}-server < 1.33
 if [ -f /var/lock/subsys/q3ded ]; then
 	# server will fail because of lack of pak0.pk3
-	/etc/rc.d/init.d/q3ded stop 1>&2
+	/sbin/service q3ded stop 1>&2
 fi
 if [ "`getent passwd quake3 | cut -d: -f6`" = "/opt/quake3" ]; then
 	/usr/sbin/usermod -d /var/games/quake3 -s /bin/sh quake3
@@ -206,6 +200,7 @@ if [ ! -f %{_datadir}/games/%{name}/baseq3/pak0.pk3 ]; then
 	echo "Quake 3 data location has changed, link or move pak0.pk3 to %{_datadir}/games/%{name}/baseq3/."
 	echo ""
 fi
+
 if [ "$1" = "0" ]; then
 	%userremove quake3
 	%groupremove quake3
