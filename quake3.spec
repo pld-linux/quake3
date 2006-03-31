@@ -4,7 +4,7 @@
 %bcond_without	openal		# don't use OpenAL
 
 %define	_dataver	1.32b3
-%define	_snap	20060301
+%define	_snap	20060330
 Summary:	Quake3 for Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
@@ -13,7 +13,7 @@ Release:	0.%{_snap}.1
 License:	GPL v2
 Group:		Applications/Games
 Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	48f29024867c2277d66c56173f613b37
+# Source0-md5:	124c35755bbb175aed010af4e6267c4e
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.png
@@ -113,7 +113,6 @@ BUILD_GAME_QVM	= 0
 USE_OPENAL	= 0
 %endif
 EOF
-mv -f web/include/status.php status.html
 
 %build
 CFLAGS="%{rpmcflags}"
@@ -213,7 +212,7 @@ fi
 
 %files common
 %defattr(644,root,root,755)
-%doc BUGS id-readme.txt README ChangeLog TODO id_patch_pk3s_Q3A_EULA.txt status.html
+%doc BUGS id-readme.txt README ChangeLog TODO
 %dir %{_datadir}/games/%{name}
 %dir %{_datadir}/games/%{name}/baseq3
 %{_pixmapsdir}/quake3.png
