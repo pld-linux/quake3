@@ -19,9 +19,9 @@
    BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes -pipe
  
 @@ -1654,6 +1650,26 @@
- 	$(INSTALL) -s -m 0755 $(BR)/missionpack/ui$(ARCH).$(SHLIBEXT) \
- 					$(COPYDIR)/missionpack/.
- 
+ #############################################################################
+ # MISC
+ #############################################################################
 +install:
 +	-$(MKDIR) -p -m 0755 $(BINDIR)/baseq3
 +	$(INSTALL) -m 0755 $(BR)/ioquake3.$(ARCH)$(BINEXT) $(BINDIR)/quake3
@@ -42,6 +42,6 @@
 +	$(INSTALL) -m 0755 $(BR)/missionpack/ui$(ARCH).$(SHLIBEXT) \
 +					$(Q3LIBDIR)/missionpack/.
 +
- clean:clean-debug clean-release
- 	$(MAKE) -C $(LOKISETUPDIR) clean
  
+ copyfiles: build_release
+ 	@if [ ! -d $(COPYDIR)/baseq3 ]; then echo "You need to set COPYDIR to where your Quake3 data is!"; fi
