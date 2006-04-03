@@ -16,9 +16,8 @@ Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
 # Source0-md5:	124c35755bbb175aed010af4e6267c4e
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
-Source4:	%{name}.png
-Source5:	%{name}.desktop
-Source6:	%{name}-smp.desktop
+Source4:	%{name}.desktop
+Source5:	%{name}-smp.desktop
 Patch0:		%{name}-gpl-Makefile-install.patch
 Patch1:		%{name}-QUAKELIBDIR.patch
 Patch2:		%{name}-alpha.patch
@@ -147,9 +146,9 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
-install %{SOURCE4} $RPM_BUILD_ROOT%{_pixmapsdir}
-install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}/quake3.desktop
-install %{SOURCE6} $RPM_BUILD_ROOT%{_desktopdir}/quake3-smp.desktop
+install code/unix/%{name}.png $RPM_BUILD_ROOT%{_pixmapsdir}
+install %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}/quake3.desktop
+install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}/quake3-smp.desktop
 
 %clean
 rm -rf $RPM_BUILD_ROOT
