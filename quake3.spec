@@ -6,6 +6,7 @@
 %define	_dataver	1.32b3
 %define	_snap	20060330
 Summary:	Quake3 for Linux
+Summary(de):	Quake3 für Linux
 Summary(pl):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
@@ -42,11 +43,15 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Quake 3 for Linux.
 
+%description -l de
+Quake 3 für Linux.
+
 %description -l pl
 Quake 3 dla Linuksa.
 
 %package server
 Summary:	Quake3 server
+Summart(de):	Quake3 Server
 Summary(pl):	Serwer Quake3
 Group:		Applications/Games
 Requires(post,preun):	/sbin/chkconfig
@@ -67,11 +72,15 @@ Provides:	user(quake3)
 %description server
 Quake3 server.
 
+%description server -l de
+Quake3 Server.
+
 %description server -l pl
 Serwer Quake3.
 
 %package smp
 Summary:	Quake3 for SMP
+Summary(de):	Quake3 für SMP
 Summary(pl):	Quake3 dla SMP
 Group:		Applications/Games
 Requires:	%{name}-common = %{version}-%{release}
@@ -79,12 +88,16 @@ Requires:	%{name}-common = %{version}-%{release}
 %description smp
 Quake3 for multi processor machine.
 
+%description smp -l de
+Quake3 für Multiprocessor Rechner.
+
 %description smp -l pl
 Quake3 dla maszyny wieloprocesorowej.
 
 %package common
-Summary:	Common files for quake3
-Summary(pl):	Pliki wspólne dla quake3
+Summary:	Common files for Quake3
+Summary(de):	Gemeinsame Dateien für Quake3
+Summary(pl):	Pliki wspólne dla Quake3
 Group:		Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
@@ -92,10 +105,13 @@ Requires:	quake3-data >= %{_dataver}-1
 Obsoletes:	quake3-single
 
 %description common
-Common files for quake3 server and player game.
+Common files for Quake3 server and player game.
+
+%description common -l de
+Gemeinsame Dateien für den Quake3 Server und das Spiel.
 
 %description common -l pl
-Pliki wspólne quake3 dla serwera i trybu gracza.
+Pliki wspólne Quake3 dla serwera i trybu gracza.
 
 %prep
 %setup -q -n %{name}
