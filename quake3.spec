@@ -51,7 +51,7 @@ Quake 3 dla Linuksa.
 
 %package server
 Summary:	Quake3 server
-Summart(de):	Quake3 Server
+Summary(de):	Quake3 Server
 Summary(pl):	Serwer Quake3
 Group:		Applications/Games
 Requires(post,preun):	/sbin/chkconfig
