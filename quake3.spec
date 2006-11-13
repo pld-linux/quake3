@@ -125,7 +125,7 @@ BUILD_CLIENT_SMP= 1
 BUILD_SERVER	= 1
 BUILD_GAME_SO	= 1
 BUILD_GAME_QVM	= 0
-%if %{without openal}
+%if !%{with openal}
 USE_OPENAL	= 0
 %endif
 EOF
