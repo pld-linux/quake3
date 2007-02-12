@@ -7,8 +7,8 @@
 %define	_snap	20060330
 %define	_rel	2
 Summary:	Quake3 for Linux
-Summary(de):	Quake3 für Linux
-Summary(pl):	Quake3 dla Linuksa
+Summary(de.UTF-8):   Quake3 fÃ¼r Linux
+Summary(pl.UTF-8):   Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
 Release:	0.%{_snap}.%{_rel}
@@ -44,16 +44,16 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Quake 3 for Linux.
 
-%description -l de
-Quake 3 für Linux.
+%description -l de.UTF-8
+Quake 3 fÃ¼r Linux.
 
-%description -l pl
+%description -l pl.UTF-8
 Quake 3 dla Linuksa.
 
 %package server
 Summary:	Quake3 server
-Summary(de):	Quake3 Server
-Summary(pl):	Serwer Quake3
+Summary(de.UTF-8):   Quake3 Server
+Summary(pl.UTF-8):   Serwer Quake3
 Group:		Applications/Games
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -73,32 +73,32 @@ Provides:	user(quake3)
 %description server
 Quake3 server.
 
-%description server -l de
+%description server -l de.UTF-8
 Quake3 Server.
 
-%description server -l pl
+%description server -l pl.UTF-8
 Serwer Quake3.
 
 %package smp
 Summary:	Quake3 for SMP
-Summary(de):	Quake3 für SMP
-Summary(pl):	Quake3 dla SMP
+Summary(de.UTF-8):   Quake3 fÃ¼r SMP
+Summary(pl.UTF-8):   Quake3 dla SMP
 Group:		Applications/Games
 Requires:	%{name}-common = %{version}-%{release}
 
 %description smp
 Quake3 for multi processor machine.
 
-%description smp -l de
-Quake3 für Multiprocessor Rechner.
+%description smp -l de.UTF-8
+Quake3 fÃ¼r Multiprocessor Rechner.
 
-%description smp -l pl
+%description smp -l pl.UTF-8
 Quake3 dla maszyny wieloprocesorowej.
 
 %package common
 Summary:	Common files for Quake3
-Summary(de):	Gemeinsame Dateien für Quake3
-Summary(pl):	Pliki wspólne dla Quake3
+Summary(de.UTF-8):   Gemeinsame Dateien fÃ¼r Quake3
+Summary(pl.UTF-8):   Pliki wspÃ³lne dla Quake3
 Group:		Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
@@ -108,11 +108,11 @@ Obsoletes:	quake3-single
 %description common
 Common files for Quake3 server and player game.
 
-%description common -l de
-Gemeinsame Dateien für den Quake3 Server und das Spiel.
+%description common -l de.UTF-8
+Gemeinsame Dateien fÃ¼r den Quake3 Server und das Spiel.
 
-%description common -l pl
-Pliki wspólne Quake3 dla serwera i trybu gracza.
+%description common -l pl.UTF-8
+Pliki wspÃ³lne Quake3 dla serwera i trybu gracza.
 
 %prep
 %setup -q -n %{name}
