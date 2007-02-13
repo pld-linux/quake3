@@ -7,8 +7,8 @@
 %define	_snap	20060330
 %define	_rel	2
 Summary:	Quake3 for Linux
-Summary(de.UTF-8):   Quake3 für Linux
-Summary(pl.UTF-8):   Quake3 dla Linuksa
+Summary(de.UTF-8):	Quake3 für Linux
+Summary(pl.UTF-8):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.33
 Release:	0.%{_snap}.%{_rel}
@@ -52,8 +52,8 @@ Quake 3 dla Linuksa.
 
 %package server
 Summary:	Quake3 server
-Summary(de.UTF-8):   Quake3 Server
-Summary(pl.UTF-8):   Serwer Quake3
+Summary(de.UTF-8):	Quake3 Server
+Summary(pl.UTF-8):	Serwer Quake3
 Group:		Applications/Games
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -81,8 +81,8 @@ Serwer Quake3.
 
 %package smp
 Summary:	Quake3 for SMP
-Summary(de.UTF-8):   Quake3 für SMP
-Summary(pl.UTF-8):   Quake3 dla SMP
+Summary(de.UTF-8):	Quake3 für SMP
+Summary(pl.UTF-8):	Quake3 dla SMP
 Group:		Applications/Games
 Requires:	%{name}-common = %{version}-%{release}
 
@@ -97,8 +97,8 @@ Quake3 dla maszyny wieloprocesorowej.
 
 %package common
 Summary:	Common files for Quake3
-Summary(de.UTF-8):   Gemeinsame Dateien für Quake3
-Summary(pl.UTF-8):   Pliki wspólne dla Quake3
+Summary(de.UTF-8):	Gemeinsame Dateien für Quake3
+Summary(pl.UTF-8):	Pliki wspólne dla Quake3
 Group:		Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
