@@ -34,10 +34,7 @@ else
 	exit 0
 fi
 
-action="$1"
-RETVAL=0
-case "$action" in
-  start)
+start() {
 	if [ ! -f /var/lock/subsys/q3ded ]; then
 		msg_starting "Quake3 dedicated server"
 		if [ ! -x /usr/bin/q3ded ]; then
@@ -49,8 +46,9 @@ case "$action" in
 	else
 		msg_already_running "Quake3 dedicated server"
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	if [ -f /var/lock/subsys/q3ded ]; then
 		msg_stopping "Quake3 dedicated server"
 		SCREEN_PID=$(su -s /bin/sh - quake3 -c "screen -ls" | awk -F. '/q3ded/{print $1}')
@@ -70,6 +68,15 @@ case "$action" in
 		rm -f /var/lock/subsys/q3ded >/dev/null 2>&1
 	fi
 	exit 0
+}
+
+RETVAL=0
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
 	;;
   status)
 	status q3ded
@@ -77,8 +84,8 @@ case "$action" in
 	exit $?
 	;;
   restart|force-reload)
-	$0 stop
-	$0 start
+	stop
+	start
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|force-reload|status}"
