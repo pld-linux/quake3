@@ -1,5 +1,5 @@
 
-fix warnings linke: the address of '...' will always evaluate as 'true'
+fix warnings like: the address of '...' will always evaluate as 'true'
 
 --- quake3/code/game/ai_dmq3.c.orig	2005-10-29 20:18:54.000000000 -0400
 +++ quake3/code/game/ai_dmq3.c	2007-03-23 05:13:30.105300235 -0400
@@ -43,15 +43,3 @@ fix warnings linke: the address of '...' will always evaluate as 'true'
  		Com_sprintf( filename, sizeof( filename ), "models/players/heads/%s/%s.md3", &headModelName[1], &headModelName[1] );
  	}
  	else {
---- quake3/code/unix/unix_main.c.orig	2006-02-26 20:39:32.000000000 -0500
-+++ quake3/code/unix/unix_main.c	2007-03-23 05:02:09.592543726 -0400
-@@ -798,6 +798,9 @@
-   if(!libHandle && homepath)
-     libHandle = try_dlopen(homepath, gamedir, fname, fqpath);
- 
-+  if(!libHandle)
-+    libHandle = try_dlopen(QUAKELIBDIR, gamedir, fname, fqpath);
-+
-   if(!libHandle && basepath)
-     libHandle = try_dlopen(basepath, gamedir, fname, fqpath);
- 
