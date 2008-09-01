@@ -24,7 +24,7 @@ Patch0:		%{name}-gpl-Makefile-install.patch
 Patch1:		%{name}-QUAKELIBDIR.patch
 Patch2:		%{name}-alpha.patch
 Patch3:		%{name}-gcc42.patch
-URL:		http://icculus.org/quake3/
+URL:		http://ioquake3.org/
 %if %{with openal}
 BuildRequires:	OpenAL-devel
 %endif
