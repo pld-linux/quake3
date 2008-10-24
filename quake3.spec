@@ -247,7 +247,7 @@ fi
 %doc BUGS id-readme.txt README ChangeLog TODO
 %dir %{_datadir}/games/%{name}
 %dir %{_datadir}/games/%{name}/baseq3
-%{_pixmapsdir}/quake3.png
+%{_pixmapsdir}/quake3.svg
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/baseq3
 %dir %{_libdir}/%{name}/missionpack
