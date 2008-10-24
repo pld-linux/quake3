@@ -1,20 +1,45 @@
-Index: code/qcommon/msg.c
+Index: code/qcommon/q_math.c
 ===================================================================
---- code/qcommon/msg.c	(revision 1474)
-+++ code/qcommon/msg.c	(working copy)
-@@ -546,6 +546,11 @@
+--- code/qcommon/q_math.c	(revision 1474)
++++ code/qcommon/q_math.c	(working copy)
+@@ -519,9 +519,13 @@
+ }
  
- #define	LOG(x) if( cl_shownet->integer == 4 ) { Com_Printf("%s ", x ); };
+ float Q_fabs( float f ) {
+-	int tmp = * ( int * ) &f;
+-	tmp &= 0x7FFFFFFF;
+-	return * ( float * ) &tmp;
++	union {
++		float f;
++		int i;
++	} fi;
++	fi.f = f;
++	fi.i &= 0x7FFFFFFF;
++	return fi.f;
+ }
+ #endif
+ 
+Index: code/qcommon/qcommon.h
+===================================================================
+--- code/qcommon/qcommon.h	(revision 1474)
++++ code/qcommon/qcommon.h	(working copy)
+@@ -111,6 +111,11 @@
+ 
+ void MSG_ReportChangeVectors_f( void );
  
 +typedef union {
 +	float f;
 +	int i;
 +} fi_conv;
 +
- void MSG_WriteDelta( msg_t *msg, int oldV, int newV, int bits ) {
- 	if ( oldV == newV ) {
- 		MSG_WriteBits( msg, 0, 1 );
-@@ -563,20 +568,22 @@
+ //============================================================================
+ 
+ /*
+Index: code/qcommon/msg.c
+===================================================================
+--- code/qcommon/msg.c	(revision 1474)
++++ code/qcommon/msg.c	(working copy)
+@@ -563,20 +563,22 @@
  }
  
  void MSG_WriteDeltaFloat( msg_t *msg, float oldV, float newV ) {
@@ -41,7 +66,7 @@ Index: code/qcommon/msg.c
  	}
  	return oldV;
  }
-@@ -617,20 +624,22 @@
+@@ -617,20 +619,22 @@
  }
  
  void MSG_WriteDeltaKeyFloat( msg_t *msg, int key, float oldV, float newV ) {
