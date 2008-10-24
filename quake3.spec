@@ -21,6 +21,7 @@ Patch1:		%{name}-alpha.patch
 Patch2:		%{name}-vm_powerpc.patch
 Patch3:		%{name}-vm_powerpc-Makefile.patch
 Patch4:		%{name}-strict-aliasing.patch
+Patch5:		%{name}-Makefile-LDFLAGS.patch
 URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-devel
@@ -123,6 +124,7 @@ Pliki wspólne Quake3 dla serwera i trybu gracza.
 %patch2 -p0
 %patch3 -p0
 %patch4 -p0
+%patch5 -p0
 
 %build
 cat << 'EOF' > Makefile.local
@@ -145,17 +147,15 @@ USE_INTERNAL_SPEEX = 1
 USE_LOCAL_HEADERS = 0
 GENERATE_DEPENDENCIES = 0
 
+DEFAULT_BASEDIR = %{_datadir}/games/%{name}
+
 override OPTIMIZE = %{rpmcflags} \
-	-DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\" \
 	-DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\"
 
 # vim spec bug: "
 
 override CC = %{__cc}
-
-# broken LDFLAGS use
-#override LDFLAGS = %{rpmldflags}
-
+override LDFLAGS = %{rpmldflags}
 override BR = rel
 
 EOF
