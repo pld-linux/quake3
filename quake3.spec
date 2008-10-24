@@ -1,45 +1,46 @@
-#
-# Conditional build:
-%bcond_with	altivec		# use altivec, no runtime detection
-%bcond_without	openal		# don't use OpenAL
 
 %define	_dataver	1.32b3
-%define	_snap	20060330
-%define	_rel	2
+%define	_snap	20081024
+%define	_rel	1
 Summary:	Quake3 for Linux
 Summary(de.UTF-8):	Quake3 für Linux
 Summary(pl.UTF-8):	Quake3 dla Linuksa
 Name:		quake3
-Version:	1.33
+Version:	1.35
 Release:	0.%{_snap}.%{_rel}
 License:	GPL v2
 Group:		Applications/Games
-Source0:	http://sparky.homelinux.org/snaps/icculus/%{name}-%{_snap}.tar.bz2
-# Source0-md5:	124c35755bbb175aed010af4e6267c4e
+Source0:	%{name}-%{_snap}.tar.bz2
+# Source0-md5:	30ca6c4b4b35626323e43ad0019d13f0
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
-Patch0:		%{name}-gpl-Makefile-install.patch
-Patch1:		%{name}-QUAKELIBDIR.patch
-Patch2:		%{name}-alpha.patch
-Patch3:		%{name}-gcc42.patch
+Patch0:		%{name}-QUAKELIBDIR.patch
+Patch1:		%{name}-alpha.patch
+Patch2:		%{name}-vm_powerpc.patch
+Patch3:		%{name}-vm_powerpc-Makefile.patch
+Patch4:		%{name}-strict-aliasing.patch
 URL:		http://ioquake3.org/
-%if %{with openal}
 BuildRequires:	OpenAL-devel
-%endif
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
+BuildRequires:	libvorbis-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
+#BuildRequires:	speex-devel
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# source has been fixed to work without those
+%define		filterout_c	-fwrapv -fno-strict-aliasing -fsigned-char
+
 %define		specflags	-ffast-math -funroll-loops -fomit-frame-pointer -fno-strict-aliasing
-%define		specflags_ia32	-falign-loops=2 -falign-jumps=2 -falign-functions=2
-%if %{with altivec}
-%define		specflags_ppc	-maltivec -mabi=altivec
-%endif
+%define		x86_flags	-falign-loops=2 -falign-jumps=2 -falign-functions=2 -fstrength-reduce
+%define		specflags_ia32	%{x86_flags}
+%define		specflags_x86_64 %{x86_flags}
+%define		specflags_amd64	%{x86_flags}
+%define		specflags_ia32e	%{x86_flags}
 %define		_noautoreqdep	libGL.so.1 libGLU.so.1
 
 %description
@@ -119,53 +120,66 @@ Pliki wspólne Quake3 dla serwera i trybu gracza.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-cat << EOF > Makefile.local
+%patch2 -p0
+%patch3 -p0
+%patch4 -p0
+
+%build
+cat << 'EOF' > Makefile.local
+BUILD_STANDALONE= 0
 BUILD_CLIENT	= 1
-BUILD_CLIENT_SMP= 1
+# smp broken
+BUILD_CLIENT_SMP= 0
 BUILD_SERVER	= 1
 BUILD_GAME_SO	= 1
 BUILD_GAME_QVM	= 0
-%if !%{with openal}
-USE_OPENAL	= 0
-%endif
+BUILD_MISSIONPACK= 1
+USE_OPENAL	= 1
+USE_OPENAL_DLOPEN = 0
+USE_CURL	= 1
+USE_CURL_DLOPEN = 0
+USE_CODEC_VORBIS = 1
+USE_MUMBLE	= 1
+USE_VOIP	= 1
+USE_INTERNAL_SPEEX = 1
+USE_LOCAL_HEADERS = 0
+GENERATE_DEPENDENCIES = 0
+
+override OPTIMIZE = %{rpmcflags} \
+	-DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\" \
+	-DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\"
+
+# vim spec bug: "
+
+override CC = %{__cc}
+
+# broken LDFLAGS use
+#override LDFLAGS = %{rpmldflags}
+
+override BR = rel
+
 EOF
 
-%build
-CFLAGS="%{rpmcflags}"
-CFLAGS="$CFLAGS -DDEFAULT_BASEDIR=\\\"%{_datadir}/games/%{name}\\\""
-CFLAGS="$CFLAGS -DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\""
-CFLAGS="$CFLAGS -Wall -Wimplicit -Wstrict-prototypes"
-CFLAGS="$CFLAGS -DUSE_SDL_VIDEO=1 -DUSE_SDL_SOUND=1 $(sdl-config --cflags)"
-%if %{with openal}
-CFLAGS="$CFLAGS -DUSE_OPENAL=1"
-%endif
-CFLAGS="$CFLAGS -DNDEBUG -MMD"
-%ifnarch %{ix86} %{x8664}
-CFLAGS="$CFLAGS -DNO_VM_COMPILED"
-%endif
-
-%{__make} makedirs tools targets \
-	B="release-%{_target}"	\
-	CC="%{__cc}"		\
-	CFLAGS="$CFLAGS"
+%{__make} release
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/games/%{name}/baseq3} \
+	$RPM_BUILD_ROOT%{_libdir}/%{name}/{baseq3,missionpack} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT/var/games/quake3
 
-%{__make} install \
-	BR="release-%{_target}"	\
-	BINDIR=$RPM_BUILD_ROOT%{_bindir}		\
-	Q3LIBDIR=$RPM_BUILD_ROOT%{_libdir}/%{name}
+install rel/ioquake3.* $RPM_BUILD_ROOT%{_bindir}/%{name}
+#install rel/ioquake3-smp.* $RPM_BUILD_ROOT%{_bindir}/%{name}-smp
+install rel/ioq3ded.* $RPM_BUILD_ROOT%{_bindir}/q3ded
+
+install rel/baseq3/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}/baseq3
+install rel/missionpack/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}/missionpack
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/q3ded
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/q3ded
-install code/unix/%{name}.png $RPM_BUILD_ROOT%{_pixmapsdir}
+install misc/%{name}.svg $RPM_BUILD_ROOT%{_pixmapsdir}
 install %{SOURCE4} $RPM_BUILD_ROOT%{_desktopdir}/quake3.desktop
 install %{SOURCE5} $RPM_BUILD_ROOT%{_desktopdir}/quake3-smp.desktop
 
@@ -247,7 +261,9 @@ fi
 %attr(755,root,root) %{_bindir}/q3ded
 %attr(750,quake3,quake3) /var/games/quake3
 
+%if 0
 %files smp
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/quake3-smp
 %{_desktopdir}/quake3-smp.desktop
+%endif
