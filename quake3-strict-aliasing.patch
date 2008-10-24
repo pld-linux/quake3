@@ -1,0 +1,317 @@
+Index: code/qcommon/msg.c
+===================================================================
+--- code/qcommon/msg.c	(revision 1474)
++++ code/qcommon/msg.c	(working copy)
+@@ -546,6 +546,11 @@
+ 
+ #define	LOG(x) if( cl_shownet->integer == 4 ) { Com_Printf("%s ", x ); };
+ 
++typedef union {
++	float f;
++	int i;
++} fi_conv;
++
+ void MSG_WriteDelta( msg_t *msg, int oldV, int newV, int bits ) {
+ 	if ( oldV == newV ) {
+ 		MSG_WriteBits( msg, 0, 1 );
+@@ -563,20 +568,22 @@
+ }
+ 
+ void MSG_WriteDeltaFloat( msg_t *msg, float oldV, float newV ) {
++	fi_conv fi;
+ 	if ( oldV == newV ) {
+ 		MSG_WriteBits( msg, 0, 1 );
+ 		return;
+ 	}
++	fi.f = newV;
+ 	MSG_WriteBits( msg, 1, 1 );
+-	MSG_WriteBits( msg, *(int *)&newV, 32 );
++	MSG_WriteBits( msg, fi.i, 32 );
+ }
+ 
+ float MSG_ReadDeltaFloat( msg_t *msg, float oldV ) {
+ 	if ( MSG_ReadBits( msg, 1 ) ) {
+-		float	newV;
++		fi_conv fi;
+ 
+-		*(int *)&newV = MSG_ReadBits( msg, 32 );
+-		return newV;
++		fi.i = MSG_ReadBits( msg, 32 );
++		return fi.f;
+ 	}
+ 	return oldV;
+ }
+@@ -617,20 +624,22 @@
+ }
+ 
+ void MSG_WriteDeltaKeyFloat( msg_t *msg, int key, float oldV, float newV ) {
++	fi_conv fi;
+ 	if ( oldV == newV ) {
+ 		MSG_WriteBits( msg, 0, 1 );
+ 		return;
+ 	}
++	fi.f = newV;
+ 	MSG_WriteBits( msg, 1, 1 );
+-	MSG_WriteBits( msg, (*(int *)&newV) ^ key, 32 );
++	MSG_WriteBits( msg, fi.i ^ key, 32 );
+ }
+ 
+ float MSG_ReadDeltaKeyFloat( msg_t *msg, int key, float oldV ) {
+ 	if ( MSG_ReadBits( msg, 1 ) ) {
+-		float	newV;
++		fi_conv fi;
+ 
+-		*(int *)&newV = MSG_ReadBits( msg, 32 ) ^ key;
+-		return newV;
++		fi.i = MSG_ReadBits( msg, 32 ) ^ key;
++		return fi.f;
+ 	}
+ 	return oldV;
+ }
+Index: code/game/g_syscalls.c
+===================================================================
+--- code/game/g_syscalls.c	(revision 1474)
++++ code/game/g_syscalls.c	(working copy)
+@@ -35,10 +35,15 @@
+ 	syscall = syscallptr;
+ }
+ 
++typedef union {
++	float f;
++	int i;
++} fi_conv;
++
+ int PASSFLOAT( float x ) {
+-	float	floatTemp;
+-	floatTemp = x;
+-	return *(int *)&floatTemp;
++	fi_conv fi;
++	fi.f = x;
++	return fi.i;
+ }
+ 
+ void	trap_Printf( const char *fmt ) {
+@@ -290,9 +295,9 @@
+ }
+ 
+ float trap_AAS_Time(void) {
+-	int temp;
+-	temp = syscall( BOTLIB_AAS_TIME );
+-	return (*(float*)&temp);
++	fi_conv fi;
++	fi.i = syscall( BOTLIB_AAS_TIME );
++	return fi.f;
+ }
+ 
+ int trap_AAS_PointAreaNum(vec3_t point) {
+@@ -476,15 +481,15 @@
+ }
+ 
+ float trap_Characteristic_Float(int character, int index) {
+-	int temp;
+-	temp = syscall( BOTLIB_AI_CHARACTERISTIC_FLOAT, character, index );
+-	return (*(float*)&temp);
++	fi_conv fi;
++	fi.i = syscall( BOTLIB_AI_CHARACTERISTIC_FLOAT, character, index );
++	return fi.f;
+ }
+ 
+ float trap_Characteristic_BFloat(int character, int index, float min, float max) {
+-	int temp;
+-	temp = syscall( BOTLIB_AI_CHARACTERISTIC_BFLOAT, character, index, PASSFLOAT(min), PASSFLOAT(max) );
+-	return (*(float*)&temp);
++	fi_conv fi;
++	fi.i = syscall( BOTLIB_AI_CHARACTERISTIC_BFLOAT, character, index, PASSFLOAT(min), PASSFLOAT(max) );
++	return fi.f;
+ }
+ 
+ int trap_Characteristic_Integer(int character, int index) {
+@@ -652,9 +657,9 @@
+ }
+ 
+ float trap_BotAvoidGoalTime(int goalstate, int number) {
+-	int temp;
+-	temp = syscall( BOTLIB_AI_AVOID_GOAL_TIME, goalstate, number );
+-	return (*(float*)&temp);
++	fi_conv fi;
++	fi.i = syscall( BOTLIB_AI_AVOID_GOAL_TIME, goalstate, number );
++	return fi.f;
+ }
+ 
+ void trap_BotSetAvoidGoalTime(int goalstate, int number, float avoidtime) {
+Index: code/cgame/cg_syscalls.c
+===================================================================
+--- code/cgame/cg_syscalls.c	(revision 1474)
++++ code/cgame/cg_syscalls.c	(working copy)
+@@ -37,9 +37,12 @@
+ 
+ 
+ int PASSFLOAT( float x ) {
+-	float	floatTemp;
+-	floatTemp = x;
+-	return *(int *)&floatTemp;
++	union {
++		float f;
++		int i;
++	} fi;
++	fi.f = x;
++	return fi.i;
+ }
+ 
+ void	trap_Print( const char *fmt ) {
+Index: code/ui/ui_syscalls.c
+===================================================================
+--- code/ui/ui_syscalls.c	(revision 1474)
++++ code/ui/ui_syscalls.c	(working copy)
+@@ -34,10 +34,15 @@
+ 	syscall = syscallptr;
+ }
+ 
++typedef union {
++	float f;
++	int i;
++} fi_conv;
++
+ int PASSFLOAT( float x ) {
+-	float	floatTemp;
+-	floatTemp = x;
+-	return *(int *)&floatTemp;
++	fi_conv fi;
++	fi.f = x;
++	return fi.i;
+ }
+ 
+ void trap_Print( const char *string ) {
+@@ -65,9 +70,9 @@
+ }
+ 
+ float trap_Cvar_VariableValue( const char *var_name ) {
+-	int temp;
+-	temp = syscall( UI_CVAR_VARIABLEVALUE, var_name );
+-	return (*(float*)&temp);
++	fi_conv fi;
++	fi.i = syscall( UI_CVAR_VARIABLEVALUE, var_name );
++	return fi.f;
+ }
+ 
+ void trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize ) {
+Index: code/client/cl_cgame.c
+===================================================================
+--- code/client/cl_cgame.c	(revision 1474)
++++ code/client/cl_cgame.c	(working copy)
+@@ -400,11 +400,13 @@
+ }
+ 
+ static int	FloatAsInt( float f ) {
+-	int		temp;
++	union {
++		float f;
++		int i;
++	} fi;
+ 
+-	*(float *)&temp = f;
+-
+-	return temp;
++	fi.f = f;
++	return fi.i;
+ }
+ 
+ /*
+Index: code/client/cl_ui.c
+===================================================================
+--- code/client/cl_ui.c	(revision 1474)
++++ code/client/cl_ui.c	(working copy)
+@@ -691,11 +691,13 @@
+ ====================
+ */
+ static int FloatAsInt( float f ) {
+-	int		temp;
++	union {
++		float f;
++		int i;
++	} fi;
+ 
+-	*(float *)&temp = f;
+-
+-	return temp;
++	fi.f = f;
++	return fi.i;
+ }
+ 
+ /*
+Index: Makefile
+===================================================================
+--- Makefile	(revision 1474)
++++ Makefile	(working copy)
+@@ -234,7 +234,7 @@
+   endif
+   endif
+ 
+-  BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes \
++  BASE_CFLAGS = -Wall -Wstrict-aliasing -Wimplicit -Wstrict-prototypes \
+     -pipe -DUSE_ICON $(shell sdl-config --cflags)
+ 
+   ifeq ($(USE_OPENAL),1)
+@@ -352,7 +352,7 @@
+     BASE_CFLAGS += -mstackrealign
+   endif
+ 
+-  BASE_CFLAGS += -fno-strict-aliasing -DMACOS_X -fno-common -pipe
++  BASE_CFLAGS += -Wstrict-aliasing -DMACOS_X -fno-common -pipe
+ 
+   ifeq ($(USE_OPENAL),1)
+     BASE_CFLAGS += -DUSE_OPENAL
+@@ -423,7 +423,7 @@
+ 
+   ARCH=x86
+ 
+-  BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes \
++  BASE_CFLAGS = -Wall -Wstrict-aliasing -Wimplicit -Wstrict-prototypes \
+     -DUSE_ICON
+ 
+   # In the absence of wspiapi.h, require Windows XP or later
+@@ -516,7 +516,7 @@
+   endif #alpha test
+ 
+ 
+-  BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes \
++  BASE_CFLAGS = -Wall -Wstrict-aliasing -Wimplicit -Wstrict-prototypes \
+     -DUSE_ICON $(shell sdl-config --cflags)
+ 
+   ifeq ($(USE_OPENAL),1)
+@@ -582,7 +582,7 @@
+   ARCH=i386
+ 
+ 
+-  BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes \
++  BASE_CFLAGS = -Wall -Wstrict-aliasing -Wimplicit -Wstrict-prototypes \
+     -DUSE_ICON $(shell sdl-config --cflags)
+ 
+   ifeq ($(USE_OPENAL),1)
+@@ -644,7 +644,7 @@
+   SHLIBLDFLAGS=-shared $(LDFLAGS)
+   THREAD_LDFLAGS=-lpthread
+ 
+-  BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes
++  BASE_CFLAGS = -Wall -Wstrict-aliasing -Wimplicit -Wstrict-prototypes
+ 
+   ifneq ($(ARCH),i386)
+     BASE_CFLAGS += -DNO_VM_COMPILED
+@@ -708,7 +708,7 @@
+   endif
+ 
+ 
+-  BASE_CFLAGS = -Wall -fno-strict-aliasing -Wimplicit -Wstrict-prototypes \
++  BASE_CFLAGS = -Wall -Wstrict-aliasing -Wimplicit -Wstrict-prototypes \
+     -pipe -DUSE_ICON $(shell sdl-config --cflags)
+ 
+   OPTIMIZE = -O3 -ffast-math -funroll-loops
+@@ -1015,7 +1015,7 @@
+ # QVM BUILD TOOLS
+ #############################################################################
+ 
+-TOOLS_OPTIMIZE = -g -O2 -Wall -fno-strict-aliasing
++TOOLS_OPTIMIZE = -g -O2 -Wall -Wstrict-aliasing
+ TOOLS_CFLAGS = $(TOOLS_OPTIMIZE) \
+                -DTEMPDIR=\"$(TEMPDIR)\" -DSYSTEM=\"\" \
+                -I$(Q3LCCSRCDIR) \
