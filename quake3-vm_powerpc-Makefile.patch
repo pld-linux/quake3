@@ -1,0 +1,66 @@
+Index: Makefile
+===================================================================
+--- Makefile	(revision 1474)
++++ Makefile	(working copy)
+@@ -67,6 +67,9 @@
+ ifeq ($(COMPILE_ARCH),powerpc)
+   COMPILE_ARCH=ppc
+ endif
++ifeq ($(COMPILE_ARCH),powerpc64)
++  COMPILE_ARCH=ppc64
++endif
+ 
+ ifndef ARCH
+ ARCH=$(COMPILE_ARCH)
+@@ -272,10 +275,14 @@
+   else
+   ifeq ($(ARCH),ppc)
+     BASE_CFLAGS += -maltivec
+-    HAVE_VM_COMPILED=false
++    HAVE_VM_COMPILED=true
+   endif
++  ifeq ($(ARCH),ppc64)
++    BASE_CFLAGS += -maltivec
++    HAVE_VM_COMPILED=true
+   endif
+   endif
++  endif
+ 
+   ifneq ($(HAVE_VM_COMPILED),true)
+     BASE_CFLAGS += -DNO_VM_COMPILED
+@@ -345,6 +352,9 @@
+     BASE_CFLAGS += -faltivec
+     OPTIMIZE += -O3
+   endif
++  ifeq ($(ARCH),ppc64)
++    BASE_CFLAGS += -faltivec
++  endif
+   ifeq ($(ARCH),i386)
+     OPTIMIZE += -march=prescott -mfpmath=sse
+     # x86 vm will crash without -mstackrealign since MMX instructions will be
+@@ -1425,8 +1435,11 @@
+     Q3OBJ += $(B)/client/vm_x86_64.o $(B)/client/vm_x86_64_assembler.o
+   endif
+   ifeq ($(ARCH),ppc)
+-    Q3OBJ += $(B)/client/vm_ppc.o
++    Q3OBJ += $(B)/client/vm_powerpc.o $(B)/client/vm_powerpc_asm.o
+   endif
++  ifeq ($(ARCH),ppc64)
++    Q3OBJ += $(B)/client/vm_powerpc.o $(B)/client/vm_powerpc_asm.o
++  endif
+ endif
+ 
+ ifeq ($(PLATFORM),mingw32)
+@@ -1566,8 +1579,11 @@
+     Q3DOBJ += $(B)/ded/vm_x86_64.o $(B)/client/vm_x86_64_assembler.o
+   endif
+   ifeq ($(ARCH),ppc)
+-    Q3DOBJ += $(B)/ded/vm_ppc.o
++    Q3DOBJ += $(B)/ded/vm_powerpc.o $(B)/ded/vm_powerpc_asm.o
+   endif
++  ifeq ($(ARCH),ppc64)
++    Q3DOBJ += $(B)/ded/vm_powerpc.o $(B)/ded/vm_powerpc_asm.o
++  endif
+ endif
+ 
+ ifeq ($(PLATFORM),mingw32)
