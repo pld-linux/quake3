@@ -1,6 +1,6 @@
 
 %define	_dataver	1.32b3
-%define	_snap	20081024
+%define	_snap	20081110
 %define	_rel	1
 Summary:	Quake3 for Linux
 Summary(de.UTF-8):	Quake3 für Linux
@@ -11,17 +11,13 @@ Release:	0.%{_snap}.%{_rel}
 License:	GPL v2
 Group:		Applications/Games
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	30ca6c4b4b35626323e43ad0019d13f0
+# Source0-md5:	65ed9787590bc043412c38b69c2c8521
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 Patch0:		%{name}-QUAKELIBDIR.patch
 Patch1:		%{name}-alpha.patch
-Patch2:		%{name}-vm_powerpc.patch
-Patch3:		%{name}-vm_powerpc-Makefile.patch
-Patch4:		%{name}-strict-aliasing.patch
-Patch5:		%{name}-Makefile-LDFLAGS.patch
 URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-devel
@@ -121,10 +117,6 @@ Pliki wspólne Quake3 dla serwera i trybu gracza.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p0
-%patch3 -p0
-%patch4 -p0
-%patch5 -p0
 
 %build
 cat << 'EOF' > Makefile.local
