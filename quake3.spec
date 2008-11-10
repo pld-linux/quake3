@@ -22,6 +22,7 @@ URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
+BuildRequires:	curl-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 #BuildRequires:	speex-devel
@@ -32,7 +33,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # source has been fixed to work without those
 %define		filterout_c	-fwrapv -fno-strict-aliasing -fsigned-char
 
-%define		specflags	-ffast-math -funroll-loops -fomit-frame-pointer -fno-strict-aliasing
+%define		specflags	-ffast-math -funroll-loops -fomit-frame-pointer
 %define		x86_flags	-falign-loops=2 -falign-jumps=2 -falign-functions=2 -fstrength-reduce
 %define		specflags_ia32	%{x86_flags}
 %define		specflags_x86_64 %{x86_flags}
