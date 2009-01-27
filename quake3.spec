@@ -1,16 +1,16 @@
 
-%define	_dataver	1.32b3
-%define	_snap	20081110
-%define	_rel	1
+%define		dataver	1.32b3-1
+%define		snap	20081110
+%define		rel		2
 Summary:	Quake3 for Linux
 Summary(de.UTF-8):	Quake3 für Linux
 Summary(pl.UTF-8):	Quake3 dla Linuksa
 Name:		quake3
 Version:	1.35
-Release:	0.%{_snap}.%{_rel}
+Release:	0.%{snap}.%{rel}
 License:	GPL v2
 Group:		Applications/Games
-Source0:	%{name}-%{_snap}.tar.bz2
+Source0:	%{name}-%{snap}.tar.bz2
 # Source0-md5:	65ed9787590bc043412c38b69c2c8521
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
@@ -28,6 +28,7 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 #BuildRequires:	speex-devel
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
+Requires:	quake3-data >= %{dataver}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # source has been fixed to work without those
@@ -85,6 +86,7 @@ Summary(de.UTF-8):	Quake3 für SMP
 Summary(pl.UTF-8):	Quake3 dla SMP
 Group:		Applications/Games
 Requires:	%{name}-common = %{version}-%{release}
+Requires:	quake3-data >= %{dataver}
 
 %description smp
 Quake3 for multi processor machine.
@@ -102,7 +104,6 @@ Summary(pl.UTF-8):	Pliki wspólne dla Quake3
 Group:		Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
-Requires:	quake3-data >= %{_dataver}-1
 Obsoletes:	quake3-single
 
 %description common
