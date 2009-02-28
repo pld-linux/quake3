@@ -9,7 +9,7 @@ Name:		quake3
 Version:	1.35
 Release:	0.%{snap}.%{rel}
 License:	GPL v2
-Group:		Applications/Games
+Group:		X11/Applications/Games
 Source0:	%{name}-%{snap}.tar.bz2
 # Source0-md5:	65ed9787590bc043412c38b69c2c8521
 Source2:	q3ded.init
@@ -55,7 +55,7 @@ Quake 3 dla Linuksa.
 Summary:	Quake3 server
 Summary(de.UTF-8):	Quake3 Server
 Summary(pl.UTF-8):	Serwer Quake3
-Group:		Applications/Games
+Group:		X11/Applications/Games
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -84,7 +84,7 @@ Serwer Quake3.
 Summary:	Quake3 for SMP
 Summary(de.UTF-8):	Quake3 für SMP
 Summary(pl.UTF-8):	Quake3 dla SMP
-Group:		Applications/Games
+Group:		X11/Applications/Games
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	quake3-data >= %{dataver}
 
@@ -101,7 +101,7 @@ Quake3 dla maszyny wieloprocesorowej.
 Summary:	Common files for Quake3
 Summary(de.UTF-8):	Gemeinsame Dateien für Quake3
 Summary(pl.UTF-8):	Pliki wspólne dla Quake3
-Group:		Applications/Games
+Group:		X11/Applications/Games
 Requires(triggerpostun):	/usr/sbin/groupdel
 Requires(triggerpostun):	/usr/sbin/userdel
 Obsoletes:	quake3-single
