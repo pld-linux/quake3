@@ -1,17 +1,18 @@
 
 %define		dataver	1.32b3-1
-%define		snap	20081110
-%define		rel		2
+%define		snap	20090430
+%define		rel	1
 Summary:	Quake3 for Linux
 Summary(de.UTF-8):	Quake3 für Linux
 Summary(pl.UTF-8):	Quake3 dla Linuksa
 Name:		quake3
-Version:	1.35
+Version:	1.36
 Release:	0.%{snap}.%{rel}
 License:	GPL v2
 Group:		X11/Applications/Games
+# svn export svn://svn.icculus.org/quake3/branches/1.36 quake3
 Source0:	%{name}-%{snap}.tar.bz2
-# Source0-md5:	65ed9787590bc043412c38b69c2c8521
+# Source0-md5:	64fb50ede462b45bc0c2e289b04bd244
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.desktop
