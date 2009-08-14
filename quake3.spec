@@ -1,7 +1,7 @@
 
 %define		dataver	1.32b3-1
 %define		snap	20090430
-%define		rel	1
+%define		rel	2
 Summary:	Quake3 for Linux
 Summary(de.UTF-8):	Quake3 für Linux
 Summary(pl.UTF-8):	Quake3 dla Linuksa
