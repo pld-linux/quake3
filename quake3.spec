@@ -21,12 +21,15 @@ Patch0:		%{name}-QUAKELIBDIR.patch
 Patch1:		%{name}-alpha.patch
 URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
+BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
 BuildRequires:	SDL-devel
 BuildRequires:	curl-devel
 BuildRequires:	libvorbis-devel
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 #BuildRequires:	speex-devel
+BuildRequires:	which
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
 Requires:	quake3-data >= %{dataver}
@@ -211,10 +214,8 @@ if [ "$1" = "0" ]; then
 fi
 
 %triggerpostun server -- %{name}-server < 1.33
-if [ -f /var/lock/subsys/q3ded ]; then
-	# server will fail because of lack of pak0.pk3
-	/sbin/service q3ded stop 1>&2
-fi
+# server will fail because of lack of pak0.pk3
+%service q3ded stop
 if [ "`getent passwd quake3 | cut -d: -f6`" = "/opt/quake3" ]; then
 	/usr/sbin/usermod -d /var/games/quake3 -s /bin/sh quake3
 fi
