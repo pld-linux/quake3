@@ -1,7 +1,7 @@
 
 %define		dataver	1.32b3-1
 %define		snap	20090430
-%define		rel	2
+%define		rel	3
 Summary:	Quake3 for Linux
 Summary(de.UTF-8):	Quake3 für Linux
 Summary(pl.UTF-8):	Quake3 dla Linuksa
@@ -19,6 +19,7 @@ Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 Patch0:		%{name}-QUAKELIBDIR.patch
 Patch1:		%{name}-alpha.patch
+Patch2:		%{name}-strcpy-abuse.patch
 URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -123,6 +124,7 @@ Pliki wspólne Quake3 dla serwera i trybu gracza.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 cat << 'EOF' > Makefile.local
