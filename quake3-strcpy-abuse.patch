@@ -1,4 +1,4 @@
---- quake3-1.36/code/botlib/l_precomp.c~	2009-04-27 08:42:37.000000000 +0200
+--- quake3-1.36/code/botlib/l_precomp.c	2009-04-27 08:42:37.000000000 +0200
 +++ quake3-1.36/code/botlib/l_precomp.c~	2009-11-03 21:03:08.000000000 +0100
 @@ -948,7 +948,7 @@ void PC_ConvertPath(char *path)
  		if ((*ptr == '\\' || *ptr == '/') &&
@@ -9,7 +9,7 @@
  		} //end if
  		else
  		{
---- quake3-1.36/code/botlib/l_script.c~	2009-04-27 08:42:37.000000000 +0200
+--- quake3-1.36/code/botlib/l_script.c	2009-04-27 08:42:37.000000000 +0200
 +++ quake3-1.36/code/botlib/l_script.c~	2009-11-03 21:06:11.000000000 +0100
 @@ -1118,7 +1118,7 @@ void StripDoubleQuotes(char *string)
  {
