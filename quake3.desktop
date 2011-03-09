@@ -1,10 +1,9 @@
 [Desktop Entry]
 Name=Quake III
-Comment=Quake 3 for linux
+Comment=Quake 3 for Linux
 Comment[pl]=Quake 3 dla Linuksa
 Exec=quake3
 Icon=quake3
 Terminal=false
 Type=Application
 Categories=Game;X-FPPGame;
-# vi: encoding=utf-8
