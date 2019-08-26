@@ -1,7 +1,7 @@
 
 %define		dataver	1.32b3-1
-%define		snap	20090430
-%define		rel	5
+%define		snap	20190729
+%define		rel	1
 Summary:	Quake3 for Linux
 Summary(de.UTF-8):	Quake3 für Linux
 Summary(pl.UTF-8):	Quake3 dla Linuksa
@@ -12,25 +12,29 @@ License:	GPL v2
 Group:		X11/Applications/Games
 # svn export svn://svn.icculus.org/quake3/branches/1.36 quake3
 Source0:	%{name}-%{snap}.tar.bz2
-# Source0-md5:	64fb50ede462b45bc0c2e289b04bd244
+# Source0-md5:	e992c1043fbef63ddcb2b55af2d3543d
 Source2:	q3ded.init
 Source3:	q3ded.sysconfig
 Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 Patch0:		%{name}-QUAKELIBDIR.patch
 Patch1:		%{name}-alpha.patch
-Patch2:		%{name}-strcpy-abuse.patch
 URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
-BuildRequires:	SDL-devel
+BuildRequires:	SDL2-devel
 BuildRequires:	curl-devel
+BuildRequires:	freetype-devel >= 2
+BuildRequires:	libjpeg-devel
+BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel
+BuildRequires:	opus-devel
+BuildRequires:	opusfile-devel
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
-#BuildRequires:	speex-devel
 BuildRequires:	which
+BuildRequires:	zlib-devel
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	OpenGL
 Requires:	quake3-data >= %{dataver}
@@ -124,7 +128,6 @@ Pliki wspólne Quake3 dla serwera i trybu gracza.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 cat << 'EOF' > Makefile.local
@@ -141,16 +144,16 @@ USE_OPENAL_DLOPEN = 0
 USE_CURL	= 1
 USE_CURL_DLOPEN = 0
 USE_CODEC_VORBIS = 1
+USE_FREETYPE = 1
 USE_MUMBLE	= 1
 USE_VOIP	= 1
-USE_INTERNAL_SPEEX = 1
-USE_LOCAL_HEADERS = 0
+USE_INTERNAL_LIBS = 0
 GENERATE_DEPENDENCIES = 0
 
 DEFAULT_BASEDIR = %{_datadir}/games/%{name}
 
 override OPTIMIZE = %{rpmcflags} \
-	-DQUAKELIBDIR=\\\"%{_libdir}/%{name}\\\"
+	-DQUAKELIBDIR=\"%{_libdir}/%{name}\"
 
 # vim spec bug: "
 
@@ -173,6 +176,8 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 install rel/ioquake3.* $RPM_BUILD_ROOT%{_bindir}/%{name}
 #install rel/ioquake3-smp.* $RPM_BUILD_ROOT%{_bindir}/%{name}-smp
 install rel/ioq3ded.* $RPM_BUILD_ROOT%{_bindir}/q3ded
+
+install rel/renderer*.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 install rel/baseq3/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}/baseq3
 install rel/missionpack/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}/missionpack
@@ -239,10 +244,11 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/quake3
 %{_desktopdir}/quake3.desktop
+%attr(755,root,root) %{_libdir}/%{name}/renderer*.so
 
 %files common
 %defattr(644,root,root,755)
-%doc BUGS id-readme.txt README ChangeLog TODO
+%doc CONTRIBUTING.md id-readme.txt README.md SECURITY.md ChangeLog TODO
 %dir %{_datadir}/games/%{name}
 %dir %{_datadir}/games/%{name}/baseq3
 %{_pixmapsdir}/quake3.svg

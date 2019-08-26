@@ -1,24 +1,38 @@
---- quake3/code/sys/sys_main.c~orig	2008-10-24 17:27:20.000000000 +0200
-+++ quake3/code/sys/sys_main.c	2008-10-24 17:28:11.000000000 +0200
-@@ -383,7 +383,8 @@
- Used to load a development dll instead of a virtual machine
- #1 look down current path
- #2 look in fs_homepath
--#3 look in fs_basepath
-+#3 look in QUAKELIBDIR
-+#4 look in fs_basepath
+diff -urN quake3.orig/code/sys/sys_main.c quake3/code/sys/sys_main.c
+--- quake3.orig/code/sys/sys_main.c	2019-07-29 18:40:49.424888973 +0200
++++ quake3/code/sys/sys_main.c	2019-07-29 18:51:00.376127397 +0200
+@@ -500,7 +500,7 @@
+ Sys_LoadDll
+ 
+ First try to load library name from system library path,
+-from executable path, then fs_basepath.
++from executable path, QUAKELIBDIR, then fs_basepath.
  =================
  */
- void *Sys_LoadDll( const char *name, char *fqpath ,
-@@ -413,6 +414,11 @@
- 	if(!libHandle && homepath)
- 		libHandle = Sys_TryLibraryLoad(homepath, gamedir, fname, fqpath);
+ 
+@@ -542,6 +542,25 @@
+ 			Com_Printf("Skipping trying to load \"%s\" from \"%s\", file name is too long.\n", name, topDir);
+ 		}
  
 +#if defined(QUAKELIBDIR)
-+	if(!libHandle)
-+		libHandle = Sys_TryLibraryLoad(QUAKELIBDIR, gamedir, fname, fqpath);
++		if(!dllhandle)
++		{
++			char libPath[MAX_OSPATH];
++			int len;
++
++			len = Com_sprintf(libPath, sizeof(libPath), "%s%c%s", QUAKELIBDIR, PATH_SEP, name);
++			if(len < sizeof(libPath))
++			{
++				Com_Printf("Trying to load \"%s\" from \"%s\"...\n", name, QUAKELIBDIR);
++				dllhandle = Sys_LoadLibrary(libPath);
++			}
++			else
++			{
++				Com_Printf("Skipping trying to load \"%s\" from \"%s\", file name is too long.\n", name, QUAKELIBDIR);
++			}
++		}
 +#endif
 +
- 	if(!libHandle && basepath)
- 		libHandle = Sys_TryLibraryLoad(basepath, gamedir, fname, fqpath);
- 
+ 		if(!dllhandle)
+ 		{
+ 			const char *basePath = Cvar_VariableString("fs_basepath");
