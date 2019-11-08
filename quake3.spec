@@ -19,7 +19,7 @@ Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 Patch0:		%{name}-QUAKELIBDIR.patch
 Patch1:		%{name}-alpha.patch
-Patch2;		x32.patch
+Patch2:		x32.patch
 URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-GLU-devel
