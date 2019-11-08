@@ -1,0 +1,11 @@
+--- quake3/Makefile~	2019-07-11 15:20:31.000000000 +0200
++++ quake3/Makefile	2019-11-08 20:27:12.427121911 +0100
+@@ -353,7 +353,7 @@
+   ifeq ($(ARCH),x86_64)
+     OPTIMIZEVM = -O3
+     OPTIMIZE = $(OPTIMIZEVM) -ffast-math
+-    HAVE_VM_COMPILED = true
++    HAVE_VM_COMPILED = false
+   else
+   ifeq ($(ARCH),x86)
+     OPTIMIZEVM = -O3 -march=i586

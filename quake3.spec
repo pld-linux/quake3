@@ -19,6 +19,7 @@ Source4:	%{name}.desktop
 Source5:	%{name}-smp.desktop
 Patch0:		%{name}-QUAKELIBDIR.patch
 Patch1:		%{name}-alpha.patch
+Patch2;		x32.patch
 URL:		http://ioquake3.org/
 BuildRequires:	OpenAL-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -128,6 +129,9 @@ Pliki wspólne Quake3 dla serwera i trybu gracza.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
+%ifarch x32
+%patch2 -p1
+%endif
 
 %build
 cat << 'EOF' > Makefile.local
