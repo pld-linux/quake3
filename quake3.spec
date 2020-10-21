@@ -167,7 +167,7 @@ override BR = rel
 
 EOF
 
-%{__make} release
+%{__make} V=1 release
 
 %install
 rm -rf $RPM_BUILD_ROOT
